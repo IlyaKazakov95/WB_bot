@@ -1,5 +1,9 @@
 import asyncio
 import logging
+import pandas as pd
+import requests
+import matplotlib.pyplot as plt
+import seaborn as sns
 from aiogram import Bot, Dispatcher
 from config.config import Config, load_config
 from handlers import user
