@@ -1,4 +1,4 @@
-from aiogram.types import Message, InputFile
+from aiogram.types import Message, FSInputFile
 from aiogram.filters import Command, CommandStart
 from lexicon.lexicon import LEXICON_RU
 import os
@@ -24,7 +24,8 @@ async def process_stock_command(message: Message):
     data = stock_process()
     await message.answer(text=LEXICON_RU['/stock'])
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
-    await message.reply_document(document=InputFile(doc_path))
+    doc = FSInputFile(doc_path)
+    await message.reply_document(document=doc)
 
 # Этот хендлер срабатывает на команду /orders
 @router.message(Command(commands='orders'))
@@ -32,7 +33,8 @@ async def process_orders_command(message: Message):
     data = orders_process()
     await message.answer(text=LEXICON_RU['/orders'])
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
-    await message.reply_photo(photo=InputFile(img_path))
+    img = FSInputFile(img_path)
+    await message.reply_photo(photo=img)
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
