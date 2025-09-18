@@ -8,11 +8,6 @@ from WB_API.merge import stock_process, orders_process
 # Инициализируем роутер уровня модуля
 router = Router()
 
-img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
-doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
-photo = InputFile(img_path)
-doc = InputFile(doc_path)
-
 # Этот хендлер срабатывает на команду /start
 @router.message(CommandStart())
 async def process_start_command(message: Message):
@@ -28,17 +23,18 @@ async def process_help_command(message: Message):
 async def process_stock_command(message: Message):
     data = stock_process()
     await message.answer(text=LEXICON_RU['/stock'])
-    await message.reply_document(document=doc)
+    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
+    await message.reply_document(document=InputFile(doc_path))
 
 # Этот хендлер срабатывает на команду /orders
 @router.message(Command(commands='orders'))
 async def process_orders_command(message: Message):
     data = orders_process()
     await message.answer(text=LEXICON_RU['/orders'])
-    await message.reply_photo(photo=photo)
+    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
+    await message.reply_photo(photo=InputFile(img_path))
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
 async def process_other_message(message: Message):
     await message.answer(text=LEXICON_RU['no_echo'])
-
