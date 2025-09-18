@@ -1,4 +1,6 @@
 import json
+
+import lexicon
 from lexicon import *
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -9,9 +11,12 @@ import pandas as pd
 
 def stock_process():
     data = stock_extract()
-    time.sleep(5)
+    time.sleep(3)
     with open('stock.json', 'r', encoding="utf-8") as f:
         stocks = json.loads(f.read()) # загружаем стоки
+    # Проверка: если это словарь, превращаем в список словарей
+    if isinstance(stocks, dict):
+        stocks = [stocks]
     df = pd.DataFrame(stocks)
     df['В пути до получателей'] = df.apply(lambda x: sum(
         x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
