@@ -2,8 +2,8 @@ import json
 from lexicon import *
 import matplotlib.pyplot as plt
 import seaborn as sns
-from . import orders_extract
-from . import stock_extract
+from WB_API.stock_extract import stock_extract
+from WB_API.orders_extract import orders_extract
 import time
 import pandas as pd
 
