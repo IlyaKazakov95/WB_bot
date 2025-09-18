@@ -26,14 +26,14 @@ async def process_help_command(message: Message):
 async def process_stock_command(message: Message):
     data = stock_process()
     await message.answer(text=LEXICON_RU['/stock'])
-    await message.reply_document(document=open(doc_path, 'rb'))
+    await message.reply_document(document=doc_path)
 
 # Этот хендлер срабатывает на команду /orders
 @router.message(Command(commands='orders'))
 async def process_orders_command(message: Message):
     data = orders_process()
     await message.answer(text=LEXICON_RU['/orders'])
-    await message.reply_photo(photo=open(img_path, 'rb'))
+    await message.reply_photo(photo=img_path)
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
