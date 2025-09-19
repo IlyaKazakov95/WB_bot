@@ -15,40 +15,40 @@ def stock_process():
     with open('stock.json', 'r', encoding="utf-8") as f:
         stocks = json.loads(f.read()) # загружаем стоки
     # Проверка: если это словарь, превращаем в список словарей
-    if isinstance(stocks, dict):
-        stocks = [stocks]
-    df = pd.DataFrame(stocks)
-    df['В пути до получателей'] = df.apply(lambda x: sum(
-        x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
-        x['warehouses'][i]['warehouseName'] == 'В пути до получателей'), axis=1)
-    df['Возвраты в пути'] = df.apply(lambda x: sum(
-        x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
-        x['warehouses'][i]['warehouseName'] == 'В пути возвраты на склад WB'), axis=1)
-    df['Всего находится на складах'] = df.apply(lambda x: sum(
-        x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
-        x['warehouses'][i]['warehouseName'] == 'Всего находится на складах'), axis=1)
-    df['Москва'] = df.apply(lambda x: sum(x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
-                                          x['warehouses'][i]['warehouseName'] == 'Электросталь' or x['warehouses'][i][
-                                              'warehouseName'] == 'Коледино' or x['warehouses'][i][
-                                              'warehouseName'] == 'Белые Столбы'), axis=1)
-    df['Казань + Екат'] = df.apply(lambda x: sum(x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
-                                                 x['warehouses'][i]['warehouseName'] == 'Казань' or x['warehouses'][i][
-                                                     'warehouseName'] == 'Екатеринбург - Перспективный 12'), axis=1)
-    df = df.drop('warehouses', axis=1)
-    df_mapping = read_xls()  # загружаем мэппинг, в lexicon __init__ функция своя
-    df_mapping['barcode'] = df_mapping.apply(lambda x: str(x['barcode']), axis=1)  # датафрейм с мэппингом
-    df_orders = orders_process()
-    # объединяем мэппинг, стоки и продажи
-    df_full = df_mapping.merge(df[['barcode', 'Всего находится на складах', 'Возвраты в пути']], left_on='barcode',
-                               right_on='barcode', how='left')
-    df_orders_group = df_orders.groupby('barcode').agg(total_sales=("isCancel", "count"))
-    df_total = df_full.merge(df_orders_group, left_on='barcode', right_on='barcode', how='left')
-    df_total['total_sales'] = df_total['total_sales'].fillna(0)
-    df_total['Всего находится на складах'] = df_total['Всего находится на складах'].fillna(0)
-    df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
-    df_total = df_total.sort_values(by="total_sales", ascending=False)
-    df_total.to_excel("file.xlsx", sheet_name="Sheet1", index=False)
-    print(df_total)
+    # if isinstance(stocks, dict):
+    #     stocks = [stocks]
+    # df = pd.DataFrame(stocks)
+    # df['В пути до получателей'] = df.apply(lambda x: sum(
+    #     x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
+    #     x['warehouses'][i]['warehouseName'] == 'В пути до получателей'), axis=1)
+    # df['Возвраты в пути'] = df.apply(lambda x: sum(
+    #     x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
+    #     x['warehouses'][i]['warehouseName'] == 'В пути возвраты на склад WB'), axis=1)
+    # df['Всего находится на складах'] = df.apply(lambda x: sum(
+    #     x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
+    #     x['warehouses'][i]['warehouseName'] == 'Всего находится на складах'), axis=1)
+    # df['Москва'] = df.apply(lambda x: sum(x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
+    #                                       x['warehouses'][i]['warehouseName'] == 'Электросталь' or x['warehouses'][i][
+    #                                           'warehouseName'] == 'Коледино' or x['warehouses'][i][
+    #                                           'warehouseName'] == 'Белые Столбы'), axis=1)
+    # df['Казань + Екат'] = df.apply(lambda x: sum(x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
+    #                                              x['warehouses'][i]['warehouseName'] == 'Казань' or x['warehouses'][i][
+    #                                                  'warehouseName'] == 'Екатеринбург - Перспективный 12'), axis=1)
+    # df = df.drop('warehouses', axis=1)
+    # df_mapping = read_xls()  # загружаем мэппинг, в lexicon __init__ функция своя
+    # df_mapping['barcode'] = df_mapping.apply(lambda x: str(x['barcode']), axis=1)  # датафрейм с мэппингом
+    # df_orders = orders_process()
+    # # объединяем мэппинг, стоки и продажи
+    # df_full = df_mapping.merge(df[['barcode', 'Всего находится на складах', 'Возвраты в пути']], left_on='barcode',
+    #                            right_on='barcode', how='left')
+    # df_orders_group = df_orders.groupby('barcode').agg(total_sales=("isCancel", "count"))
+    # df_total = df_full.merge(df_orders_group, left_on='barcode', right_on='barcode', how='left')
+    # df_total['total_sales'] = df_total['total_sales'].fillna(0)
+    # df_total['Всего находится на складах'] = df_total['Всего находится на складах'].fillna(0)
+    # df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
+    # df_total = df_total.sort_values(by="total_sales", ascending=False)
+    # df_total.to_excel("file.xlsx", sheet_name="Sheet1", index=False)
+    # print(df_total)
     return True
 
 def orders_process():
