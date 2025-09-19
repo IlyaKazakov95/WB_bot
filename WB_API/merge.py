@@ -48,6 +48,8 @@ def stock_process():
     df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
     df_total = df_total.sort_values(by="total_sales", ascending=False)
     df_total.to_excel("file.xlsx", sheet_name="Sheet1", index=False)
+    print(df_total)
+    return True
 
 def orders_process():
     data = orders_extract()
