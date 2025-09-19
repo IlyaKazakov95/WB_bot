@@ -43,7 +43,7 @@ async def process_orders_command(message: Message):
 # Этот хендлер срабатывает на команду /WhoIsOrta
 @router.message(F.text=='/WhoIsOrta')
 async def process_who_command(message: Message):
-    img_path = os.path.join(os.path.dirname(__file__), '.', 'handlers', 'who.png')
+    img_path = os.path.join(os.path.dirname(__file__), 'who.png')
     img = FSInputFile(img_path)
     await message.reply_photo(photo=img)
 
