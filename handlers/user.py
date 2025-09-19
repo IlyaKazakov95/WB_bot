@@ -23,7 +23,7 @@ async def process_help_command(message: Message):
 async def process_stock_command(message: Message):
     data = stock_process()
     await message.answer(text=LEXICON_RU['/stock'])
-    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
+    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'stock.json')
     doc = FSInputFile(doc_path)
     await message.reply_document(document=doc)
 
