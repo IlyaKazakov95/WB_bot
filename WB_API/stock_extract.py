@@ -9,7 +9,8 @@ def stock_extract():
     env.read_env()
     response = requests.get(url, headers = {"Authorization": env('HeaderApiToken')}, params = {"groupByBarcode": True}, verify=True)
     task_id = response.json()['data']['taskId']
-    time.sleep(5) # делаем задержку, чтобы task_id успел сформироваться
+    print(task_id)
+    time.sleep(20) # делаем задержку, чтобы в task_id успел сформироваться файл
     # надо прописать обработку исключений здесь, если task_id не будет
     getting_report = f'https://seller-analytics-api.wildberries.ru/api/v1/warehouse_remains/tasks/{task_id}/download'
     response = requests.get(getting_report, headers = {"Authorization": env('HeaderApiToken')}, verify=True)
