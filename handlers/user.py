@@ -43,7 +43,7 @@ async def process_callback_command_Ozon(callback: CallbackQuery):
     await callback.message.edit_text(text="Ozon", reply_markup=keyboard_Ozon)
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery Ozon
-@router.callback_query(F.data=='back')
+@router.callback_query(F.data=='Back')
 async def process_callback_command_back(callback: CallbackQuery):
     await callback.message.edit_text(text="Выбери площадку", reply_markup=keyboard_start)
 
