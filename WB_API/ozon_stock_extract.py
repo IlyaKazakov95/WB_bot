@@ -5,6 +5,7 @@ import time
 import pandas as pd
 from lexicon import *
 import datetime as dt
+from pathlib import Path
 
 def ozon_stock_extract():
     env = Env()
@@ -30,7 +31,9 @@ def ozon_stock_extract():
     df_mapping['barcode'] = df_mapping.apply(lambda x: str(x['barcode']), axis=1)
     df_full = df_mapping.merge(df_group, left_on='Ozon_SKU', right_on='sku', how='left')
     df_full = df_full[df_full["Ozon_SKU"]>0]
-    df_orders = pd.read_excel('ozon_orders.xlsx')
+    current_file = Path(__file__).resolve()
+    orders_file = current_file.parent / 'ozon_orders.xlsx'
+    df_orders = pd.read_excel(orders_file)
     df_orders['created_at'] = pd.to_datetime(df_orders['created_at'], utc=True)
     date_filter = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=90)  # UTC для совпадения с колонкой
     df_orders = df_orders[df_orders['created_at']>date_filter]

@@ -4,22 +4,26 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 359
+                "quantity": 350
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 23
+                "quantity": 21
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 63
+                "quantity": 94
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 62
+                "quantity": 92
             },
             {
                 "warehouseName": "Краснодар",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Тула",
                 "quantity": 1
             }
         ]
@@ -29,15 +33,11 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 16
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
+                "quantity": 15
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 223
+                "quantity": 221
             },
             {
                 "warehouseName": "Коледино",
@@ -45,7 +45,7 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 220
+                "quantity": 218
             },
             {
                 "warehouseName": "Краснодар",
@@ -62,52 +62,23 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 21
+                "quantity": 17
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
+                "quantity": 6
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 214
+                "quantity": 202
             },
             {
                 "warehouseName": "Казань",
-                "quantity": 90
+                "quantity": 85
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 124
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656731",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 23
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 195
-            },
-            {
-                "warehouseName": "Казань",
-                "quantity": 87
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 14
-            },
-            {
-                "warehouseName": "Белые Столбы",
-                "quantity": 94
+                "quantity": 117
             }
         ]
     },
@@ -116,15 +87,15 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 28
+                "quantity": 20
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 6
+                "quantity": 4
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 170
+                "quantity": 192
             },
             {
                 "warehouseName": "Казань",
@@ -132,11 +103,48 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 137
+                "quantity": 159
+            },
+            {
+                "warehouseName": "Краснодар",
+                "quantity": 1
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 18
+                "quantity": 17
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656731",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 17
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 193
+            },
+            {
+                "warehouseName": "Казань",
+                "quantity": 85
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 13
+            },
+            {
+                "warehouseName": "Белые Столбы",
+                "quantity": 94
+            },
+            {
+                "warehouseName": "Сарапул",
+                "quantity": 1
             }
         ]
     },
@@ -145,7 +153,7 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 22
+                "quantity": 15
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
@@ -153,15 +161,73 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 145
+                "quantity": 158
             },
             {
                 "warehouseName": "Казань",
-                "quantity": 72
+                "quantity": 71
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 87
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656397",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 27
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 6
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 100
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 86
+            },
+            {
+                "warehouseName": "Новосибирск",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 12
+            },
+            {
+                "warehouseName": "Тула",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656366",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 19
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 5
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 95
             },
             {
                 "warehouseName": "Электросталь",
                 "quantity": 73
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 22
             }
         ]
     },
@@ -178,65 +244,36 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 112
+                "quantity": 110
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 112
+                "quantity": 109
+            },
+            {
+                "warehouseName": "Тула",
+                "quantity": 1
             }
         ]
     },
     {
-        "barcode": "4607108656397",
+        "barcode": "4607108657479",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 46
+                "quantity": 41
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 5
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 64
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 48
-            },
-            {
-                "warehouseName": "Новосибирск",
                 "quantity": 2
             },
             {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 14
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656366",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 22
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 5
-            },
-            {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 73
+                "quantity": 71
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 50
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 23
+                "quantity": 71
             }
         ]
     },
@@ -245,22 +282,47 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 14
+                "quantity": 8
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
+                "quantity": 3
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 79
+                "quantity": 88
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 78
+                "quantity": 88
+            }
+        ]
+    },
+    {
+        "barcode": "4607108658001",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 47
             },
             {
-                "warehouseName": "Самара (Новосемейкино)",
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 16
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 35
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 33
+            },
+            {
+                "warehouseName": "Тула",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Рязань (Тюшевское)",
                 "quantity": 1
             }
         ]
@@ -270,15 +332,15 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 12
+                "quantity": 6
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 80
+                "quantity": 91
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 60
+                "quantity": 71
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
@@ -287,57 +349,11 @@
         ]
     },
     {
-        "barcode": "4607108657479",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 62
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 22
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 22
-            }
-        ]
-    },
-    {
-        "barcode": "4607108658001",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 63
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 17
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Тула",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Рязань (Тюшевское)",
-                "quantity": 1
-            }
-        ]
-    },
-    {
         "barcode": "4607108656427",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 8
+                "quantity": 10
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
@@ -345,44 +361,15 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 67
+                "quantity": 71
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 50
+                "quantity": 57
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 17
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657202",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 22
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 3
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 47
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 35
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 11
-            },
-            {
-                "warehouseName": "Рязань (Тюшевское)",
-                "quantity": 1
+                "quantity": 14
             }
         ]
     },
@@ -391,76 +378,51 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 6
+                "quantity": 5
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 63
-            },
-            {
-                "warehouseName": "Казань",
-                "quantity": 38
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 25
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659350",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 54
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 10
-            },
-            {
-                "warehouseName": "Всего находится на складах",
                 "quantity": 4
             },
             {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 73
+            },
+            {
+                "warehouseName": "Казань",
+                "quantity": 36
+            },
+            {
                 "warehouseName": "Электросталь",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Рязань (Тюшевское)",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Владимир",
-                "quantity": 1
+                "quantity": 37
             }
         ]
     },
     {
-        "barcode": "4607108657707",
+        "barcode": "4607108657202",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 49
+                "quantity": 15
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 8
+                "quantity": 4
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 7
+                "quantity": 61
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 6
+                "quantity": 51
             },
             {
-                "warehouseName": "Воронеж",
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 9
+            },
+            {
+                "warehouseName": "Рязань (Тюшевское)",
                 "quantity": 1
             }
         ]
@@ -470,15 +432,15 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 15
+                "quantity": 13
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
+                "quantity": 3
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 46
+                "quantity": 55
             },
             {
                 "warehouseName": "Казань",
@@ -486,14 +448,35 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 38
+                "quantity": 50
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 4
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657707",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 32
             },
             {
-                "warehouseName": "Тула",
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 8
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 27
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 26
+            },
+            {
+                "warehouseName": "Воронеж",
                 "quantity": 1
             }
         ]
@@ -503,15 +486,15 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 10
+                "quantity": 8
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 49
+                "quantity": 57
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 46
+                "quantity": 54
             },
             {
                 "warehouseName": "Новосибирск",
@@ -532,102 +515,23 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 20
+                "quantity": 14
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 29
-            },
-            {
-                "warehouseName": "Казань",
-                "quantity": 10
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 19
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659244",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 11
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 36
-            },
-            {
-                "warehouseName": "Казань",
-                "quantity": 21
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 15
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656762",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
                 "quantity": 4
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 42
+                "quantity": 40
             },
             {
                 "warehouseName": "Казань",
-                "quantity": 25
+                "quantity": 9
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 16
-            },
-            {
-                "warehouseName": "Рязань (Тюшевское)",
-                "quantity": 1
-            }
-        ]
-    },
-    {
-        "barcode": "4670123590557",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 8
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 3
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 34
-            },
-            {
-                "warehouseName": "Коледино",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Казань",
-                "quantity": 3
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 23
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 7
+                "quantity": 31
             }
         ]
     },
@@ -635,12 +539,8 @@
         "barcode": "4607108656465",
         "warehouses": [
             {
-                "warehouseName": "В пути до получателей",
-                "quantity": 1
-            },
-            {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 43
+                "quantity": 53
             },
             {
                 "warehouseName": "Казань",
@@ -648,7 +548,7 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 37
+                "quantity": 47
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
@@ -657,27 +557,40 @@
         ]
     },
     {
-        "barcode": "4607108656410",
+        "barcode": "4607108656762",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 8
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
+                "quantity": 2
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 34
+                "quantity": 51
             },
             {
                 "warehouseName": "Казань",
-                "quantity": 16
+                "quantity": 25
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 18
+                "quantity": 25
+            },
+            {
+                "warehouseName": "Рязань (Тюшевское)",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659350",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 38
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 12
             }
         ]
     },
@@ -686,7 +599,7 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 32
+                "quantity": 19
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
@@ -694,11 +607,11 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 7
+                "quantity": 27
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 7
+                "quantity": 27
             }
         ]
     },
@@ -707,11 +620,11 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 2
+                "quantity": 1
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 38
+                "quantity": 48
             },
             {
                 "warehouseName": "Казань",
@@ -719,36 +632,28 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 35
+                "quantity": 45
             }
         ]
     },
     {
-        "barcode": "4607108657172",
+        "barcode": "4607108659244",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 9
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
+                "quantity": 3
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 29
+                "quantity": 46
             },
             {
                 "warehouseName": "Казань",
-                "quantity": 1
+                "quantity": 21
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 19
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 9
+                "quantity": 25
             }
         ]
     },
@@ -757,15 +662,15 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 8
+                "quantity": 6
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 31
+                "quantity": 41
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 26
+                "quantity": 36
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
@@ -782,24 +687,11 @@
         ]
     },
     {
-        "barcode": "4640305451297",
+        "barcode": "4607108657172",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 30
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 9
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657165",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 21
+                "quantity": 5
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
@@ -807,11 +699,127 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 13
+                "quantity": 37
+            },
+            {
+                "warehouseName": "Казань",
+                "quantity": 1
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 13
+                "quantity": 28
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 8
+            }
+        ]
+    },
+    {
+        "barcode": "4670123590557",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 6
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 34
+            },
+            {
+                "warehouseName": "Коледино",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Казань",
+                "quantity": 2
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 23
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 7
+            },
+            {
+                "warehouseName": "Невинномысск",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656410",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 4
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 2
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 32
+            },
+            {
+                "warehouseName": "Казань",
+                "quantity": 16
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 16
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657134",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 12
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 4
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 17
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 10
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 7
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657752",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 3
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 27
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 16
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 11
             }
         ]
     },
@@ -820,10 +828,6 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 4
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
                 "quantity": 1
             },
             {
@@ -849,36 +853,11 @@
         ]
     },
     {
-        "barcode": "4607108657134",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 15
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 5
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 11
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 10
-            }
-        ]
-    },
-    {
         "barcode": "4607108659190",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 2
+                "quantity": 1
             },
             {
                 "warehouseName": "Всего находится на складах",
@@ -911,15 +890,99 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 25
+                "quantity": 24
+            },
+            {
+                "warehouseName": "Коледино",
+                "quantity": 1
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 18
+                "quantity": 17
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 6
+            }
+        ]
+    },
+    {
+        "barcode": "4640305451297",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 21
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 5
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 2
+            },
+            {
+                "warehouseName": "Рязань (Тюшевское)",
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657165",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 13
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 2
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 12
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 12
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659183",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 10
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 17
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 16
+            },
+            {
+                "warehouseName": "СЦ Ереван",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659305",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
                 "quantity": 7
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 19
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 19
             }
         ]
     },
@@ -931,62 +994,75 @@
                 "quantity": 6
             },
             {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 19
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 16
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659671",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 13
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 11
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 11
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656748",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 11
+            },
+            {
                 "warehouseName": "В пути возвраты на склад WB",
                 "quantity": 1
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 20
+                "quantity": 10
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 16
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 4
+                "quantity": 10
             }
         ]
     },
     {
-        "barcode": "4607108659183",
+        "barcode": "4607108656847",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 16
+                "quantity": 3
             },
             {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 9
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 7
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
+                "warehouseName": "В пути возвраты на склад WB",
                 "quantity": 2
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657752",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 4
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 20
+                "quantity": 15
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 9
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 11
+                "quantity": 15
             }
         ]
     },
@@ -995,7 +1071,7 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 5
+                "quantity": 2
             },
             {
                 "warehouseName": "Всего находится на складах",
@@ -1012,91 +1088,11 @@
         ]
     },
     {
-        "barcode": "4607108659305",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 15
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 7
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 7
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659480",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 16
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 5
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 5
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656847",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 4
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 15
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 15
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656748",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 17
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 2
-            }
-        ]
-    },
-    {
         "barcode": "4607108656458",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 3
+                "quantity": 5
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
@@ -1104,14 +1100,35 @@
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 14
+                "quantity": 12
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 4
+                "quantity": 2
             },
             {
                 "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "barcode": "4607108656878",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 6
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 3
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 10
+            },
+            {
+                "warehouseName": "Электросталь",
                 "quantity": 10
             }
         ]
@@ -1121,57 +1138,6 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 6
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 13
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 13
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659671",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 11
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 8
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 5
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 3
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657493",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 14
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 3
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659497",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
                 "quantity": 4
             },
             {
@@ -1180,16 +1146,46 @@
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 8
-            },
-            {
-                "warehouseName": "Екатеринбург - Перспективный 12",
-                "quantity": 5
+                "quantity": 13
             }
         ]
     },
     {
-        "barcode": "4607108656878",
+        "barcode": "4607108657080",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 8
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 9
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 9
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659329",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 3
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 13
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 13
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657493",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
@@ -1197,24 +1193,96 @@
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 3
+                "quantity": 5
             }
         ]
     },
     {
-        "barcode": "4607108657806",
+        "barcode": "4607108657721",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 5
+                "quantity": 2
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 2
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 6
+                "quantity": 9
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 9
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657783",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 12
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 12
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659480",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 12
+            },
+            {
+                "warehouseName": "В пути возвраты на склад WB",
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "barcode": "4607108659497",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 3
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 10
             },
             {
                 "warehouseName": "Электросталь",
                 "quantity": 6
+            },
+            {
+                "warehouseName": "Екатеринбург - Перспективный 12",
+                "quantity": 4
+            }
+        ]
+    },
+    {
+        "barcode": "4607108657097",
+        "warehouses": [
+            {
+                "warehouseName": "В пути до получателей",
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 10
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 10
             }
         ]
     },
@@ -1240,84 +1308,36 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 8
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 8
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657080",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 9
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659329",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 3
-            },
-            {
-                "warehouseName": "Всего находится на складах",
-                "quantity": 5
-            },
-            {
-                "warehouseName": "Электросталь",
-                "quantity": 5
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657097",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 7
-            }
-        ]
-    },
-    {
-        "barcode": "4607108657721",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
                 "quantity": 2
             },
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 2
+                "quantity": 1
+            },
+            {
+                "warehouseName": "Всего находится на складах",
+                "quantity": 6
+            },
+            {
+                "warehouseName": "Электросталь",
+                "quantity": 6
             }
         ]
     },
     {
-        "barcode": "4607108657783",
+        "barcode": "4607108657806",
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 2
+                "quantity": 1
             },
             {
                 "warehouseName": "Всего находится на складах",
-                "quantity": 2
+                "quantity": 6
             },
             {
                 "warehouseName": "Электросталь",
-                "quantity": 2
+                "quantity": 6
             }
         ]
     },
@@ -1326,24 +1346,11 @@
         "warehouses": [
             {
                 "warehouseName": "В пути до получателей",
-                "quantity": 2
-            },
-            {
-                "warehouseName": "Всего находится на складах",
                 "quantity": 1
             },
             {
-                "warehouseName": "Рязань (Тюшевское)",
+                "warehouseName": "В пути возвраты на склад WB",
                 "quantity": 1
-            }
-        ]
-    },
-    {
-        "barcode": "4607108656373",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
-                "quantity": 2
             }
         ]
     },
@@ -1374,15 +1381,6 @@
         "warehouses": [
             {
                 "warehouseName": "В пути возвраты на склад WB",
-                "quantity": 1
-            }
-        ]
-    },
-    {
-        "barcode": "4607108659589",
-        "warehouses": [
-            {
-                "warehouseName": "В пути до получателей",
                 "quantity": 1
             }
         ]
