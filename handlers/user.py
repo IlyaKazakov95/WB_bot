@@ -48,7 +48,7 @@ async def process_orders_command(callback: CallbackQuery):
     data = orders_process()
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
     img = FSInputFile(img_path)
-    await callback.answer(text=LEXICON_RU['/orders'])
+    await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
     await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
 
@@ -59,7 +59,7 @@ async def process_stock_command(callback: CallbackQuery):
     data = stock_process()
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
     doc = FSInputFile(doc_path)
-    await callback.answer(text=LEXICON_RU['/stock'])
+    await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
     await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
 
@@ -70,7 +70,7 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     data = ozon_order_graphics()
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
     img = FSInputFile(img_path)
-    await callback.answer(text=LEXICON_RU['/stock'])
+    await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_photo(photo=img)
     await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
 
@@ -81,7 +81,7 @@ async def process_ozon_stock_command(callback: CallbackQuery):
     data = ozon_stock_extract()
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_stock.xlsx')
     doc = FSInputFile(doc_path)
-    await callback.answer(text=LEXICON_RU['/stock'])
+    await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
     await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
 
