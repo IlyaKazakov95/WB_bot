@@ -5,9 +5,12 @@ import datetime as dt
 import plotly.graph_objects as go
 import numpy as np
 from plotly.subplots import make_subplots
+from pathlib import Path
 
 def ozon_order_graphics():
-    df = pd.read_excel('ozon_orders.xlsx')
+    current_file = Path(__file__).resolve()
+    orders_file = current_file.parent / 'ozon_orders.xlsx'
+    df = pd.read_excel(orders_file)
     df['created_at'] = pd.to_datetime(df['created_at'])
     df['date'] = df['created_at'].dt.date
     df_grouped = df.groupby(['date']).agg(total_sales=("quantity", "sum")).reset_index()
@@ -35,7 +38,9 @@ def ozon_order_graphics():
 
 
 def ozon_order_graphics_by_sku(filter=None):
-    df = pd.read_excel('ozon_orders.xlsx')
+    current_file = Path(__file__).resolve()
+    orders_file = current_file.parent / 'ozon_orders.xlsx'
+    df = pd.read_excel(orders_file)
     if filter is not None:
         df = df[df['sku']==filter]
     df['created_at'] = pd.to_datetime(df['created_at'])
