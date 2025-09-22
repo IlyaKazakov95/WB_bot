@@ -46,7 +46,7 @@ def ozon_order_graphics_by_sku(filter=None):
     df_grouped_week['year_week'] = df_grouped_week['year'].astype(str) + '-W' + df_grouped_week['week'].astype(str)
     plt.figure(figsize=(12, 6))
     if filter is not None:
-        filter_name = f'Продажи по {df_grouped_week['name'][0]}'
+        filter_name = f'Продажи по {df_grouped_week['name'].iloc[0]}'
     else:
         filter_name = "Продажи по датам"
     sns.barplot(
