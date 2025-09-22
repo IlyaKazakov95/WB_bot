@@ -44,40 +44,44 @@ async def process_callback_command_back(callback: CallbackQuery):
 # Этот хендлер срабатывает на команду /WB_Orders
 @router.callback_query(F.data=='/WB_Orders')
 async def process_orders_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     data = orders_process()
-    await callback.answer(text=LEXICON_RU['/orders'], show_alert=True)
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
     img = FSInputFile(img_path)
+    await callback.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
     await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
 
 # Этот хендлер срабатывает на команду /WB_Stock
 @router.callback_query(F.data=='/WB_Stock')
 async def process_stock_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     data = stock_process()
-    await callback.answer(text=LEXICON_RU['/stock'], show_alert=True)
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
     doc = FSInputFile(doc_path)
+    await callback.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
     await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
 
 # Этот хендлер срабатывает на команду /Ozon_Orders
 @router.callback_query(F.data=='/Ozon_Orders')
 async def process_ozon_orders_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     data = ozon_order_graphics()
-    await callback.answer(text=LEXICON_RU['/orders'], show_alert=True)
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
     img = FSInputFile(img_path)
+    await callback.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_photo(photo=img)
     await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
 
 # Этот хендлер срабатывает на команду /Ozon_Stock
 @router.callback_query(F.data=='/Ozon_Stock')
 async def process_ozon_stock_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     data = ozon_stock_extract()
-    await callback.answer(text=LEXICON_RU['/stock'], show_alert=True)
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_stock.xlsx')
     doc = FSInputFile(doc_path)
+    await callback.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
     await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
 
