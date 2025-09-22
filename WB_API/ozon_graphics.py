@@ -12,9 +12,12 @@ def ozon_order_graphics():
     orders_file = current_file.parent / 'ozon_orders.xlsx'
     df = pd.read_excel(orders_file)
     df['created_at'] = pd.to_datetime(df['created_at'])
-    df['date'] = df['created_at'].dt.date
-    df_grouped = df.groupby(['date']).agg(total_sales=("quantity", "sum")).reset_index()
-    df_grouped['date'] = pd.to_datetime(df_grouped['date'])
+
+    # Оставляем Timestamp вместо datetime.date
+    df['date'] = df['created_at'].dt.normalize()
+
+    df_grouped = df.groupby('date').agg(total_sales=("quantity", "sum")).reset_index()
+
     plt.figure(figsize=(12, 6))
     sns.barplot(
         data=df_grouped,
@@ -22,14 +25,16 @@ def ozon_order_graphics():
         y='total_sales',
         width=0.5
     )
-    # Разрежение меток по оси X
-    step = 20  # показывать каждую 5-ю дату
+
+    # Разрежение меток
+    step = max(1, len(df_grouped) // 20)  # динамически выбираем шаг
     plt.xticks(
         ticks=range(0, len(df_grouped), step),
         labels=df_grouped['date'].dt.strftime('%Y-%m-%d')[::step],
         rotation=70,
         fontsize=9
     )
+
     plt.xlabel("")
     plt.ylabel("Заказано, штук")
     plt.title("Продажи по датам")
@@ -137,3 +142,4 @@ def ozon_order_graphics_by_sku(filter=None):
 # fig.write_html("ozon_sales_with_table.html")
 #
 # fig.show()
+ozon_order_graphics()
