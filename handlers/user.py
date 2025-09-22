@@ -5,6 +5,8 @@ import os
 from aiogram import Router, F
 from WB_API.merge import stock_process, orders_process
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start
+from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
+from WB_API.ozon_stock_extract import ozon_stock_extract
 
 # Инициализируем роутер уровня модуля
 router = Router()
@@ -23,14 +25,6 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     await message.answer(text=LEXICON_RU['/help'])
 
-# Этот хендлер срабатывает на команду /stock
-@router.message(F.text=='/stock')
-async def process_stock_command(message: Message):
-    data = stock_process()
-    await message.answer(text=LEXICON_RU['/stock'])
-    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
-    doc = FSInputFile(doc_path)
-    await message.reply_document(document=doc)
 
 # Этот хэндлер будет срабатывать на апдейт типа CallbackQuery WB
 @router.callback_query(F.data=='Wildberries')
@@ -47,14 +41,41 @@ async def process_callback_command_Ozon(callback: CallbackQuery):
 async def process_callback_command_back(callback: CallbackQuery):
     await callback.message.edit_text(text="Выбери площадку", reply_markup=keyboard_start)
 
-# Этот хендлер срабатывает на команду /orders
-@router.message(F.text=='/orders')
+# Этот хендлер срабатывает на команду /WB_Orders
+@router.message(F.text=='/WB_Orders')
 async def process_orders_command(message: Message):
     data = orders_process()
     await message.answer(text=LEXICON_RU['/orders'])
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
     img = FSInputFile(img_path)
     await message.reply_photo(photo=img)
+
+# Этот хендлер срабатывает на команду /WB_Stock
+@router.message(F.text=='/WB_Stock')
+async def process_stock_command(message: Message):
+    data = stock_process()
+    await message.answer(text=LEXICON_RU['/stock'])
+    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
+    doc = FSInputFile(doc_path)
+    await message.reply_document(document=doc)
+
+# Этот хендлер срабатывает на команду /Ozon_Orders
+@router.message(F.text=='/Ozon_Orders')
+async def process_ozon_orders_command(message: Message):
+    data = ozon_order_graphics()
+    await message.answer(text=LEXICON_RU['/orders'])
+    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
+    img = FSInputFile(img_path)
+    await message.reply_photo(photo=img)
+
+# Этот хендлер срабатывает на команду /Ozon_Stock
+@router.message(F.text=='/Ozon_Stock')
+async def process_ozon_stock_command(message: Message):
+    data = ozon_stock_extract()
+    await message.answer(text=LEXICON_RU['/stock'])
+    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_stock.xlsx')
+    doc = FSInputFile(doc_path)
+    await message.reply_document(document=doc)
 
 # Этот хендлер срабатывает на команду /WhoIsOrta
 @router.message(F.text=='/WhoIsOrta')

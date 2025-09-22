@@ -15,4 +15,4 @@ button_2_2 = InlineKeyboardButton(text="Ozon_Stock", callback_data="Ozon_Stock")
 button_back = InlineKeyboardButton(text="Back", callback_data="Back")
 
 keyboard_WB = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2, button_back]])
-keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2, button_back]])
+keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2, button_back]])

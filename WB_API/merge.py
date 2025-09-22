@@ -54,6 +54,7 @@ def stock_process():
     df_orders = orders_process()
     df_mapping = read_xls()
     df_mapping['barcode'] = df_mapping.apply(lambda x: str(x['barcode']), axis=1)
+    df_mapping = df_mapping[['barcode', "Наименование"]]
     df_full = df_mapping.merge(df[['barcode', 'Всего находится на складах', 'Возвраты в пути']], left_on='barcode',
                                right_on='barcode', how='left')
     df_orders_group = df_orders.groupby('barcode').agg(total_sales=("isCancel", "count"))
@@ -61,6 +62,7 @@ def stock_process():
     df_total['total_sales'] = df_total['total_sales'].fillna(0)
     df_total['Всего находится на складах'] = df_total['Всего находится на складах'].fillna(0)
     df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
+    df_total['stock_cover'] = df_total.apply(lambda x: x['Всего находится на складах']/x['total_sales']*90 if x['total_sales'] > 0 else x['Всего находится на складах'])
     df_total = df_total.sort_values(by="total_sales", ascending=False)
     df_total.to_excel("file.xlsx", sheet_name="Sheet1", index=False)
     return True
