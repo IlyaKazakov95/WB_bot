@@ -42,7 +42,7 @@ async def process_callback_command_back(callback: CallbackQuery):
     await callback.message.edit_text(text="Выбери площадку", reply_markup=keyboard_start)
 
 # Этот хендлер срабатывает на команду /WB_Orders
-@router.message(F.text=='/WB_Orders')
+@router.callback_query(F.data=='/WB_Orders')
 async def process_orders_command(message: Message):
     data = orders_process()
     await message.answer(text=LEXICON_RU['/orders'])
@@ -51,7 +51,7 @@ async def process_orders_command(message: Message):
     await message.reply_photo(photo=img)
 
 # Этот хендлер срабатывает на команду /WB_Stock
-@router.message(F.text=='/WB_Stock')
+@router.callback_query(F.data=='/WB_Stock')
 async def process_stock_command(message: Message):
     data = stock_process()
     await message.answer(text=LEXICON_RU['/stock'])
@@ -60,7 +60,7 @@ async def process_stock_command(message: Message):
     await message.reply_document(document=doc)
 
 # Этот хендлер срабатывает на команду /Ozon_Orders
-@router.message(F.text=='/Ozon_Orders')
+@router.callback_query(F.data=='/Ozon_Orders')
 async def process_ozon_orders_command(message: Message):
     data = ozon_order_graphics()
     await message.answer(text=LEXICON_RU['/orders'])
@@ -69,7 +69,7 @@ async def process_ozon_orders_command(message: Message):
     await message.reply_photo(photo=img)
 
 # Этот хендлер срабатывает на команду /Ozon_Stock
-@router.message(F.text=='/Ozon_Stock')
+@router.callback_query(F.data=='/Ozon_Stock')
 async def process_ozon_stock_command(message: Message):
     data = ozon_stock_extract()
     await message.answer(text=LEXICON_RU['/stock'])
