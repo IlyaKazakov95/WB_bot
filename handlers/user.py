@@ -45,6 +45,7 @@ async def process_callback_command_back(callback: CallbackQuery):
 @router.callback_query(F.data=='/WB_Orders')
 async def process_orders_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBngNo0lwZQuecuOIvt415JZ0ugggatAAC6FoAAkdHeEkbUe10quf-QDYE')
     data = orders_process()
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
     img = FSInputFile(img_path)
