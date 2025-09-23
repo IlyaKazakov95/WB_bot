@@ -51,21 +51,24 @@ def ozon_order_graphics_by_sku(filter=None):
     current_file = Path(__file__).resolve()
     orders_file = current_file.parent / 'ozon_orders.xlsx'
     df = pd.read_excel(orders_file)
-    if filter is not None:
-        df = df[df['sku']==int(filter)]
     df['created_at'] = pd.to_datetime(df['created_at'])
     df['date'] = df['created_at'].dt.date
     df['year'] = df['created_at'].dt.year
     df['week'] = df['created_at'].dt.isocalendar().week  # ISO-неделя
+    df_all_weeks = df.groupby(['year', 'week']).agg(total_sales=('quantity', 'sum')).reset_index() # создаем все недели, чтобы потом объединить
+    df_all_weeks['year_week'] = df_all_weeks['year'].astype(str) + '-W' + df_all_weeks['week'].astype(str)
+    if filter is not None:
+        df = df[df['sku']==int(filter)]
     df_grouped_week = df.groupby(['year', 'week', 'name']).agg(total_sales=('quantity', 'sum')).reset_index()
     df_grouped_week['year_week'] = df_grouped_week['year'].astype(str) + '-W' + df_grouped_week['week'].astype(str)
+    df_all_weeks = df_all_weeks[['year_week']].merge(df_grouped_week[['year_week','total_sales', 'name']], left_on = "year_week", right_on = "year_week", how='left')
     plt.figure(figsize=(12, 6))
     if filter is not None:
-        filter_name = f"Продажи по {df_grouped_week['name'].iloc[0]}"
+        filter_name = f"Продажи по {df_all_weeks['name'].iloc[0]}"
     else:
         filter_name = "Продажи по датам"
     sns.barplot(
-        data=df_grouped_week,
+        data=df_all_weeks,
         x='year_week',
         y='total_sales',
         width=0.5,
@@ -77,8 +80,8 @@ def ozon_order_graphics_by_sku(filter=None):
     # Разрежение меток по оси X
     step = 2  # показывать каждую 5-ю дату
     plt.xticks(
-        ticks=range(0, len(df_grouped_week), step),
-        labels=df_grouped_week['year_week'][::step],
+        ticks=range(0, len(df_all_weeks), step),
+        labels=df_all_weeks['year_week'][::step],
         rotation=70,
         fontsize=9
     )
@@ -155,4 +158,3 @@ def ozon_order_graphics_by_sku(filter=None):
 # fig.write_html("ozon_sales_with_table.html")
 #
 # fig.show()
-ozon_order_graphics()

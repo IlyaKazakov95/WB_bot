@@ -76,7 +76,7 @@ def stock_process():
     df_total['total_sales'] = df_total['total_sales'].fillna(0)
     df_total['Всего находится на складах'] = df_total['Всего находится на складах'].fillna(0)
     df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
-    df_total['stock_cover'] = df_total.apply(lambda x: x['Всего находится на складах']/x['total_sales']*90 if x['total_sales'] > 0 else x['Всего находится на складах'], axis=1)
+    df_total['stock_cover'] = df_total.apply(lambda x: int(x['Всего находится на складах']/x['total_sales']*90) if x['total_sales'] > 0 else x['Всего находится на складах'], axis=1)
     df_total = df_total.sort_values(by="total_sales", ascending=False)
     file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     file_name = f'WB_stock {file_date}.xlsx'
