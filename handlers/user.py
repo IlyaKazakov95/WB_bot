@@ -58,8 +58,7 @@ async def process_stock_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(
         sticker='CAACAgIAAxkBAAEBngFo0lwOMe8IR3M3xcCiVB9h67hAXAACZ2IAAmsxeEn1NiNpBuDibDYE')
-    data = stock_process()
-    doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
+    doc_path = stock_process()
     doc = FSInputFile(doc_path)
     await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
@@ -75,7 +74,7 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    kb = create_inline_kb(width=2, **LEXICON_PRODUCT_RU)
+    kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU)
     await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
 
 # Этот хендлер срабатывает на команды по баркодам
@@ -88,8 +87,7 @@ async def process_ozon_orders_by_sku_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU)
-    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_Ozon)
 
 # Этот хендлер срабатывает на команду /Ozon_Stock
 @router.callback_query(F.data=='/Ozon_Stock')

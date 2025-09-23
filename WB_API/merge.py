@@ -32,15 +32,24 @@ def orders_process():
     plt.xticks(rotation=45)
     plt.xlabel("Дата")
     plt.ylabel("Количество заказов")
-    plt.title("Продажи по датам")
     plt.tight_layout()
-    img_name = f'sales_by_date {dt.datetime.now().strftime("%Y%m%d%H%M%S")}.png'
+    img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'sales_by_date {img_date}.png'
+    plt.title(f"Продажи по датам. Время формирования отчета {img_date}")
     img_path = Path(__file__).parent / img_name
     plt.savefig(img_path, dpi=300)  # сохранение картинки
     plt.close()
     return df_orders, img_path
 
-def stock_process():
+def stock_process()
+
+    folder = Path(__file__).parent
+    # Удаляем старые Excel с шаблоном "WB_stock *.xlsx"
+    for old_file in folder.glob("WB_stock *.xlsx"):
+        try:
+            old_file.unlink()  # удаляем файл
+        except Exception as e:
+            print(f"Не удалось удалить {old_file}: {e}")
     data = stock_extract()
     time.sleep(3)
     with open('stock.json', 'r', encoding="utf-8") as f:
@@ -69,5 +78,8 @@ def stock_process():
     df_total['Возвраты в пути'] = df_total['Возвраты в пути'].fillna(0)
     df_total['stock_cover'] = df_total.apply(lambda x: x['Всего находится на складах']/x['total_sales']*90 if x['total_sales'] > 0 else x['Всего находится на складах'], axis=1)
     df_total = df_total.sort_values(by="total_sales", ascending=False)
-    df_total.to_excel("file.xlsx", sheet_name="Sheet1", index=False)
-    return True
+    file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = f'WB_stock {file_date}.xlsx'
+    file_path = Path(__file__).parent / file_name
+    df_total.to_excel(file_name, sheet_name="Sheet1", index=False)
+    return file_path
