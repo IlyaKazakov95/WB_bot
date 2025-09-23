@@ -1,3 +1,6 @@
+import pandas as pd
+from pathlib import Path
+
 LEXICON_RU: dict[str, str] = {
     '/start': 'Привет!\n\nЯ бот-помощник для работы с Wildberries и Ozon\n'
               'Пока в мой функционал входит отправка текущих стоков в днях покрытия и график продаж за 3 месяца\n'
@@ -13,7 +16,16 @@ LEXICON_RU: dict[str, str] = {
 
 LEXICON_COMMANDS_RU: dict[str, str] = {
     '/start': 'Перезапуск бота',
-    '/help': 'Инструкция по работе бота',
-    '/orders': 'Выгрузка заказов за 3 месяца',
-    '/stock': 'Выгрузка текущего стока'
+    '/help': 'Инструкция по работе бота'
+    #,'/orders': 'Выгрузка заказов за 3 месяца',
+    #'/stock': 'Выгрузка текущего стока'
 }
+
+
+current_file = Path(__file__).resolve()
+file = current_file.parent / 'Mapping.xlsx'
+df = pd.read_excel(file)
+df = df[["barcode", "Наименование"]].reset_index()
+LEXICON_PRODUCT_RU: dict[str, str] = {}
+for index, row in df.iterrows():
+    LEXICON_PRODUCT_RU[row['barcode']] = row['Наименование']

@@ -1,10 +1,10 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery, KeyboardButton, ReplyKeyboardMarkup
 from aiogram.filters import Command, CommandStart
-from lexicon.lexicon import LEXICON_RU
+from lexicon.lexicon import LEXICON_RU, LEXICON_PRODUCT_RU
 import os
 from aiogram import Router, F
 from WB_API.merge import stock_process, orders_process
-from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start
+from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb
 from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
 from WB_API.ozon_stock_extract import ozon_stock_extract
 
@@ -75,9 +75,24 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     data = ozon_order_graphics()
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
     img = FSInputFile(img_path)
-    await callback.message.answer(text=LEXICON_RU['/stock'])
+    await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
+    kb = create_inline_kb(width=2, **LEXICON_PRODUCT_RU)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
+
+# Этот хендлер срабатывает на команды по баркодам
+@router.callback_query(lambda x: x.data.isdigit() and len(x.data)==13)
+async def process_ozon_orders_by_sku_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBngVo0l7RHB6WPJJjwF-FEkzfQioDLQACZF8AAiAMeEm-gIMfjPJM9zYE')
+    data = ozon_order_graphics_by_sku(filter=str(callback.data))
+    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_week_sku.png')
+    img = FSInputFile(img_path)
+    await callback.message.answer(text=LEXICON_RU['/orders'])
+    await callback.message.reply_photo(photo=img)
+    kb = create_inline_kb(width=2, **LEXICON_PRODUCT_RU)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
 
 # Этот хендлер срабатывает на команду /Ozon_Stock
 @router.callback_query(F.data=='/Ozon_Stock')
