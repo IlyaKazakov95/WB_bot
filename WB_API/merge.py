@@ -41,7 +41,7 @@ def orders_process():
     plt.close()
     return df_orders, img_path
 
-def stock_process()
+def stock_process():
 
     folder = Path(__file__).parent
     # Удаляем старые Excel с шаблоном "WB_stock *.xlsx"
