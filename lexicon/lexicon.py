@@ -25,8 +25,7 @@ LEXICON_COMMANDS_RU: dict[str, str] = {
 current_file = Path(__file__).resolve()
 file = current_file.parent / 'Mapping.xlsx'
 df = pd.read_excel(file)
-df = df[["barcode", "Наименование"]].reset_index()
+df = df[["Ozon_SKU", "Наименование"]].reset_index()
 LEXICON_PRODUCT_RU: dict[str, str] = {}
 for index, row in df.iterrows():
-    LEXICON_PRODUCT_RU[str(row['barcode'])] = row['Наименование']
-print(LEXICON_PRODUCT_RU)
+    LEXICON_PRODUCT_RU[str(row['Ozon_SKU'])] = row['Наименование']

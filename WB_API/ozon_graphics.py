@@ -47,7 +47,7 @@ def ozon_order_graphics_by_sku(filter=None):
     orders_file = current_file.parent / 'ozon_orders.xlsx'
     df = pd.read_excel(orders_file)
     if filter is not None:
-        df = df[df['sku']==filter]
+        df = df[df['sku']==int(filter)]
     df['created_at'] = pd.to_datetime(df['created_at'])
     df['date'] = df['created_at'].dt.date
     df['year'] = df['created_at'].dt.year

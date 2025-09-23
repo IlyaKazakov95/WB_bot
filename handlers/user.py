@@ -81,7 +81,7 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
 
 # Этот хендлер срабатывает на команды по баркодам
-@router.callback_query(lambda x: x.data.isdigit() and len(x.data)==13)
+@router.callback_query(lambda x: x.data.isdigit() and (len(x.data)==10 or len(x.data)==9))
 async def process_ozon_orders_by_sku_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(
