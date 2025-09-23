@@ -91,7 +91,7 @@ async def process_ozon_orders_by_sku_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    kb = create_inline_kb(width=2, **LEXICON_PRODUCT_RU)
+    kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU)
     await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
 
 # Этот хендлер срабатывает на команду /Ozon_Stock

@@ -40,6 +40,7 @@ def ozon_order_graphics():
     plt.title("Продажи по датам")
     plt.tight_layout()
     plt.savefig("ozon_sales_by_date.png", dpi=300)
+    plt.close()
 
 
 def ozon_order_graphics_by_sku(filter=None):
@@ -82,6 +83,7 @@ def ozon_order_graphics_by_sku(filter=None):
     plt.title(filter_name)
     plt.tight_layout()
     plt.savefig("ozon_sales_by_week_sku.png", dpi=300)
+    plt.close()
 
 
 # # df_grouped содержит 'date' и 'total_sales'
