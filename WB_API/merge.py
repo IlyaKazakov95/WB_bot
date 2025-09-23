@@ -81,5 +81,5 @@ def stock_process():
     file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     file_name = f'WB_stock {file_date}.xlsx'
     file_path = Path(__file__).parent / file_name
-    df_total.to_excel(file_name, sheet_name="Sheet1", index=False)
+    df_total.to_excel(file_path, sheet_name="Sheet1", index=False)
     return file_path
