@@ -46,8 +46,7 @@ async def process_callback_command_back(callback: CallbackQuery):
 async def process_orders_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBngNo0lwZQuecuOIvt415JZ0ugggatAAC6FoAAkdHeEkbUe10quf-QDYE')
-    data = orders_process()
-    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'sales_by_date.png')
+    img_path = orders_process()[1]
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
@@ -72,8 +71,7 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(
         sticker='CAACAgIAAxkBAAEBngVo0l7RHB6WPJJjwF-FEkzfQioDLQACZF8AAiAMeEm-gIMfjPJM9zYE')
-    data = ozon_order_graphics()
-    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
+    img_path = ozon_order_graphics()
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)

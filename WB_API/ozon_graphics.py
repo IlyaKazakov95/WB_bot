@@ -39,8 +39,12 @@ def ozon_order_graphics():
     plt.ylabel("Заказано, штук")
     plt.title("Продажи по датам")
     plt.tight_layout()
-    plt.savefig("ozon_sales_by_date.png", dpi=300)
+    timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'ozon_sales_by_date {timestamp}.png'
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)
     plt.close()
+    return img_path
 
 
 def ozon_order_graphics_by_sku(filter=None):

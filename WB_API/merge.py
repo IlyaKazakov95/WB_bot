@@ -8,6 +8,8 @@ from WB_API.stock_extract import stock_extract
 from WB_API.orders_extract import orders_extract
 import time
 import pandas as pd
+import datetime as dt
+from pathlib import Path
 
 def orders_process():
     data = orders_extract()
@@ -32,8 +34,11 @@ def orders_process():
     plt.ylabel("Количество заказов")
     plt.title("Продажи по датам")
     plt.tight_layout()
-    plt.savefig("sales_by_date.png", dpi=300)  # сохранение картинки
-    return df_orders
+    img_name = f'sales_by_date {dt.datetime.now().strftime("%Y%m%d%H%M%S")}.png'
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)  # сохранение картинки
+    plt.close()
+    return df_orders, img_path
 
 def stock_process():
     data = stock_extract()
@@ -51,7 +56,7 @@ def stock_process():
         x['warehouses'][i]['quantity'] for i in range(len(x['warehouses'])) if
         x['warehouses'][i]['warehouseName'] == 'Всего находится на складах'), axis=1)
     df = df.drop('warehouses', axis=1)
-    df_orders = orders_process()
+    df_orders = orders_process()[0]
     df_mapping = read_xls()
     df_mapping['barcode'] = df_mapping.apply(lambda x: str(x['barcode']), axis=1)
     df_mapping = df_mapping[['barcode', "Наименование"]]
