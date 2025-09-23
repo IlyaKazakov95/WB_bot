@@ -82,8 +82,15 @@ def ozon_order_graphics_by_sku(filter=None):
     plt.ylabel(f"Заказано, штук")
     plt.title(filter_name)
     plt.tight_layout()
-    plt.savefig("ozon_sales_by_week_sku.png", dpi=300)
+    timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    if filter:
+        img_name = f"ozon_sales_sku_{filter}_{timestamp}.png"
+    else:
+        img_name = f"ozon_sales_all_{timestamp}.png"
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)
     plt.close()
+    return img_path
 
 
 # # df_grouped содержит 'date' и 'total_sales'

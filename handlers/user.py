@@ -86,8 +86,7 @@ async def process_ozon_orders_by_sku_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(
         sticker='CAACAgIAAxkBAAEBngVo0l7RHB6WPJJjwF-FEkzfQioDLQACZF8AAiAMeEm-gIMfjPJM9zYE')
-    data = ozon_order_graphics_by_sku(filter=str(callback.data))
-    img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_week_sku.png')
+    img_path = ozon_order_graphics_by_sku(filter=str(callback.data))
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
