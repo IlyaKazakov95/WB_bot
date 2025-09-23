@@ -28,4 +28,5 @@ df = pd.read_excel(file)
 df = df[["barcode", "Наименование"]].reset_index()
 LEXICON_PRODUCT_RU: dict[str, str] = {}
 for index, row in df.iterrows():
-    LEXICON_PRODUCT_RU[row['barcode']] = row['Наименование']
+    LEXICON_PRODUCT_RU[str(row['barcode'])] = row['Наименование']
+print(LEXICON_PRODUCT_RU)
