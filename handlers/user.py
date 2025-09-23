@@ -57,6 +57,8 @@ async def process_orders_command(callback: CallbackQuery):
 @router.callback_query(F.data=='/WB_Stock')
 async def process_stock_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBngFo0lwOMe8IR3M3xcCiVB9h67hAXAACZ2IAAmsxeEn1NiNpBuDibDYE')
     data = stock_process()
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'file.xlsx')
     doc = FSInputFile(doc_path)
@@ -68,6 +70,8 @@ async def process_stock_command(callback: CallbackQuery):
 @router.callback_query(F.data=='/Ozon_Orders')
 async def process_ozon_orders_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBngVo0l7RHB6WPJJjwF-FEkzfQioDLQACZF8AAiAMeEm-gIMfjPJM9zYE')
     data = ozon_order_graphics()
     img_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_sales_by_date.png')
     img = FSInputFile(img_path)
@@ -79,6 +83,8 @@ async def process_ozon_orders_command(callback: CallbackQuery):
 @router.callback_query(F.data=='/Ozon_Stock')
 async def process_ozon_stock_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBnglo0l9kI8plUYwJt75T0DCM-7ySTQACSGoAAt7oeUnaJPE98T9j_jYE')
     data = ozon_stock_extract()
     doc_path = os.path.join(os.path.dirname(__file__), '..', 'WB_API', 'ozon_stock.xlsx')
     doc = FSInputFile(doc_path)
