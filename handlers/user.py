@@ -122,7 +122,7 @@ async def process_stat_command(message: Message):
         text += (
             f"👤 {db.username}\n"
             f"Запросов: {db.requests_qty}\n"
-            f"Последний: {db.last_requests.date}\n\n"
+            f"Последний: {db.last_requests_date}\n\n"
         )
 
     await message.answer(text)
