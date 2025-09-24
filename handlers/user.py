@@ -111,9 +111,21 @@ async def process_who_command(message: Message):
     await message.reply_photo(photo=img)
 
 # Этот хендлер срабатывает на команду /stat
-@router.message(F.text=='/stat')
+@router.message(F.text == '/stat')
 async def process_stat_command(message: Message):
-    await message.answer(text=user_dict)
+    if not user_dict:
+        await message.answer("Нет данных о пользователях.")
+        return
+
+    text = "📊 Статистика:\n\n"
+    for uid, db in user_dict.items():
+        text += (
+            f"👤 {db.username}\n"
+            f"Запросов: {db.requests_qty}\n"
+            f"Последний: {db.last_request_date}\n\n"
+        )
+
+    await message.answer(text)
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
