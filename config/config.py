@@ -15,6 +15,12 @@ class Config:
     bot: TgBot
     log: LogSettings
 
+@dataclass
+class Database:
+    username: str
+    requests_qty: int
+    last_requests_date: str
+
 def load_config(path: str | None = None) -> Config:
     env = Env()
     env.read_env(path)

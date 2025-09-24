@@ -7,6 +7,7 @@ from WB_API.merge import stock_process, orders_process
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb
 from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
 from WB_API.ozon_stock_extract import ozon_stock_extract
+from middlewares.outer import user_dict
 
 # Инициализируем роутер уровня модуля
 router = Router()
@@ -108,6 +109,11 @@ async def process_who_command(message: Message):
     img_path = os.path.join(os.path.dirname(__file__), 'who.png')
     img = FSInputFile(img_path)
     await message.reply_photo(photo=img)
+
+# Этот хендлер срабатывает на команду /stat
+@router.message(F.text=='/stat')
+async def process_stat_command(message: Message):
+    await message.answer(text=user_dict)
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
