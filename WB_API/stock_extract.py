@@ -15,5 +15,4 @@ def stock_extract():
     getting_report = f'https://seller-analytics-api.wildberries.ru/api/v1/warehouse_remains/tasks/{task_id}/download'
     response = requests.get(getting_report, headers = {"Authorization": env('HeaderApiToken')}, verify=True)
     response = response.json()
-    with open('stock.json', 'w', encoding="utf-8") as f:
-        f.write(json.dumps(response, ensure_ascii=False, indent=4))
+    return response

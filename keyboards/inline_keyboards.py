@@ -14,9 +14,14 @@ button_1_2 = InlineKeyboardButton(text="WB_Stock", callback_data="/WB_Stock")
 button_2_1 = InlineKeyboardButton(text="Ozon_Orders", callback_data="/Ozon_Orders")
 button_2_2 = InlineKeyboardButton(text="Ozon_Stock", callback_data="/Ozon_Stock")
 button_back = InlineKeyboardButton(text="Back", callback_data="Back")
+button_sku_wb = InlineKeyboardButton(text="Continue by sku", callback_data="SKU_WB")
+button_sku_ozon = InlineKeyboardButton(text="Continue by sku", callback_data="SKU_OZON")
 
 keyboard_WB = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2, button_back]])
 keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2, button_back]])
+
+keyboard_WB_new = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2, button_sku_wb, button_back]])
+keyboard_Ozon_new = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2, button_sku_ozon, button_back]])
 
 # Функция для формирования инлайн клавиатуры на лету
 def create_inline_kb(

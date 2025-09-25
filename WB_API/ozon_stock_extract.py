@@ -7,7 +7,25 @@ from lexicon import *
 import datetime as dt
 from pathlib import Path
 
+def stock_status(x):
+    if x == 0 or x is None:
+        return "zero stock"
+    elif x < 30:
+        return "low stock"
+    elif x < 90:
+        return "normal stock"
+    else:
+        return "high stock"
+
+
 def ozon_stock_extract():
+    folder = Path(__file__).parent
+    # Удаляем старые Excel с шаблоном "ozon_stock *.xlsx"
+    for old_file in folder.glob("ozon_stock *.xlsx"):
+        try:
+            old_file.unlink()  # удаляем файл
+        except Exception as e:
+            print(f"Не удалось удалить {old_file}: {e}")
     env = Env()
     env.read_env()
     # создаем задание на выгрузку товаров Озон
@@ -46,5 +64,9 @@ def ozon_stock_extract():
     df_full['total_sales_3_months'] =  df_full['total_sales_3_months'].fillna(0)
     df_full['stock_cover'] = df_full.apply(lambda x: int(x['Available_Stock']/x['total_sales_3_months']*90) if x['total_sales_3_months'] > 0 else x['Available_Stock'], axis=1)
     df_full = df_full.sort_values(by=['total_sales_3_months'], ascending=False)
-    df_full.to_excel('ozon_stock.xlsx', sheet_name='Sheet1', index=False)
-    return True
+    df_full['stock_status'] = df_full.apply(lambda x: stock_status(x['stock_cover']), axis=1)
+    file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = f'ozon_stock {file_date}.xlsx'
+    file_path = Path(__file__).parent / file_name
+    df_full.to_excel(file_path, sheet_name='Sheet1', index=False)
+    return file_path

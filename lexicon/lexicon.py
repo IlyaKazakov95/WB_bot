@@ -30,3 +30,8 @@ df = df[["Ozon_SKU", "Наименование"]].reset_index()
 LEXICON_PRODUCT_RU: dict[str, str] = {}
 for index, row in df.iterrows():
     LEXICON_PRODUCT_RU[str(row['Ozon_SKU'])] = row['Наименование']
+
+df2 = df[["barcode", "Наименование"]].reset_index()
+LEXICON_PRODUCT_RU_WB: dict[str, str] = {}
+for index, row in df2.iterrows():
+    LEXICON_PRODUCT_RU_WB[str(row['barcode'])] = row['Наименование']

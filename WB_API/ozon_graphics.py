@@ -19,25 +19,32 @@ def ozon_order_graphics():
     df_grouped = df.groupby('date').agg(total_sales=("quantity", "sum")).reset_index()
 
     plt.figure(figsize=(12, 6))
-    sns.barplot(
+    sns.lineplot(
         data=df_grouped,
         x='date',
         y='total_sales',
-        width=0.5
+        color='blue'
+    )
+    # заливка под линией
+    plt.fill_between(
+        df_grouped['date'],
+        df_grouped['total_sales'],
+        color='blue',  # цвет заливки
+        alpha=0.3  # прозрачность
     )
 
-    # Разрежение меток
-    step = max(1, len(df_grouped) // 20)  # динамически выбираем шаг
-    plt.xticks(
-        ticks=range(0, len(df_grouped), step),
-        labels=df_grouped['date'].dt.strftime('%Y-%m-%d')[::step],
-        rotation=70,
-        fontsize=9
+    # Горизонтальная пунктирная линия на y=70
+    plt.axhline(
+        y=70,
+        color='red',
+        linestyle='--',  # пунктир
+        linewidth=1
     )
-
+    # Настройка оси X для дат
+    plt.xticks(rotation=45)
     plt.xlabel("")
     plt.ylabel("Заказано, штук")
-    plt.title("Продажи по датам")
+    plt.title("Заказы по датам")
     plt.tight_layout()
     timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     img_name = f'ozon_sales_by_date {timestamp}.png'
@@ -64,9 +71,9 @@ def ozon_order_graphics_by_sku(filter=None):
     df_all_weeks = df_all_weeks[['year_week']].merge(df_grouped_week[['year_week','total_sales', 'name']], left_on = "year_week", right_on = "year_week", how='left')
     plt.figure(figsize=(12, 6))
     if filter is not None:
-        filter_name = f"Продажи по {df_all_weeks['name'].iloc[0]}"
+        filter_name = f"Заказы по {df_all_weeks['name'].iloc[0]}"
     else:
-        filter_name = "Продажи по датам"
+        filter_name = "Заказы по датам"
     sns.barplot(
         data=df_all_weeks,
         x='year_week',
