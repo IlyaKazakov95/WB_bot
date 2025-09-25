@@ -71,7 +71,7 @@ def ozon_order_graphics_by_sku(filter=None):
     df_all_weeks = df_all_weeks[['year_week']].merge(df_grouped_week[['year_week','total_sales', 'name']], left_on = "year_week", right_on = "year_week", how='left')
     plt.figure(figsize=(12, 6))
     if filter is not None:
-        filter_name = f"Заказы по {df_all_weeks['name'].iloc[0]}"
+        filter_name = f"Заказы по {df_all_weeks['name'].dropna().iloc[0]}"
     else:
         filter_name = "Заказы по датам"
     sns.barplot(

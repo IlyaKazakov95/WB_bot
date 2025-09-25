@@ -123,6 +123,7 @@ def union_sales():
     df = df[df['date'] < max_date]
     df_final = pd.concat([df, df_orders])
     df_final.to_excel(xlsx_path, index=False)
+    return True
 
 
 def wb_order_graphics_by_sku(filter=None):
@@ -216,14 +217,14 @@ def wb_ozon_order_graphics_by_sku(filter=None):
     df_all_weeks2 = df.groupby(['year', 'week']).agg(total_sales=('quantity', 'sum')).reset_index() # создаем все недели, чтобы потом объединить
     df_all_weeks2['year_week'] = df_all_weeks2['year'].astype(str) + '-W' + df_all_weeks2['week'].astype(str)
     if filter is not None:
-        filter2 = df_all_weeks['Ozon_SKU'].iloc[0]
+        filter2 = df_mapping[df_mapping['barcode']==int(filter)]['Ozon_SKU'].iloc[0]
         df = df[df['sku']==int(filter2)]
     df_grouped_week = df.groupby(['year', 'week']).agg(total_sales=('quantity', 'sum')).reset_index()
     df_grouped_week['year_week'] = df_grouped_week['year'].astype(str) + '-W' + df_grouped_week['week'].astype(str)
     df_all_weeks2 = df_all_weeks2[['year_week']].merge(df_grouped_week[['year_week','total_sales']], left_on = "year_week", right_on = "year_week", how='left')
-    df_all_weeks2["barcode"] = df_all_weeks['barcode'].iloc[0]
-    df_all_weeks2["Наименование"] = df_all_weeks['Наименование'].iloc[0]
-    df_all_weeks2["Ozon_SKU"] = df_all_weeks['Ozon_SKU'].iloc[0]
+    df_all_weeks2["barcode"] = int(filter)
+    df_all_weeks2["Наименование"] = df_mapping[df_mapping['barcode']==int(filter)]['Наименование'].iloc[0]
+    df_all_weeks2["Ozon_SKU"] = df_mapping[df_mapping['barcode']==int(filter)]['Ozon_SKU'].iloc[0]
     df_all_weeks2["site"] = "Ozon"
     df_total = pd.concat([df_all_weeks, df_all_weeks2])
     # строим накопленную диаграмму
@@ -258,7 +259,7 @@ def wb_ozon_order_graphics_by_sku(filter=None):
     plt.ylabel("Заказано, штук")
     timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     if filter:
-        filter_name = df_all_weeks['Наименование'].iloc[0]
+        filter_name = df_mapping[df_mapping['barcode']==int(filter)]['Наименование'].iloc[0]
         plt.title(filter_name)
         img_name = f"wb_and_ozon_sales_sku_{filter}_{timestamp}.png"
     else:

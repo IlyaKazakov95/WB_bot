@@ -4,6 +4,7 @@ import json
 import time
 import pandas as pd
 import datetime as datetime
+from pathlib import Path
 
 def ozon_extract_orders():
     env = Env()
@@ -71,4 +72,6 @@ def ozon_extract_orders():
                                                                                              "warehouse_name",
                                                                                              "cluster_from",
                                                                                              "cluster_to"]]
-    df_orders_final.to_excel("ozon_orders.xlsx", sheet_name="Sheet1", index=False)
+    xlsx_path = Path(__file__).parent / "ozon_orders.xlsx"
+    df_orders_final.to_excel(xlsx_path, sheet_name="Sheet1", index=False)
+    return True

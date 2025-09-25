@@ -7,6 +7,7 @@ from WB_API.merge import stock_process, orders_process, union_sales, wb_order_gr
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new, keyboard_Ozon_middle, keyboard_WB_middle
 from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
 from WB_API.ozon_stock_extract import ozon_stock_extract
+from WB_API.ozon_orders_extract import ozon_extract_orders
 
 # Инициализируем роутер уровня модуля
 router = Router()
@@ -173,6 +174,18 @@ async def process_stat_command(message: Message, user_dict: dict):
         )
 
     await message.answer(text)
+
+# Этот хендлер срабатывает на команду /wb_update
+@router.message(F.text == '/wb_update')
+async def process_wb_update_command(message: Message):
+    data = union_sales()
+    await message.answer(text='Началось обновление продаж WB')
+
+# Этот хендлер срабатывает на команду /ozon_update
+@router.message(F.text == '/ozon_update')
+async def process_ozon_update_command(message: Message):
+    data = ozon_extract_orders()
+    await message.answer(text='Началось обновление продаж Ozon')
 
 # Этот хендлер срабатывает на остальные сообщения
 @router.message()
