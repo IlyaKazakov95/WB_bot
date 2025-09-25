@@ -59,7 +59,7 @@ async def process_callback_command_sku_wb(callback: CallbackQuery):
 
 # Этот хэндлер будет срабатывать на апдейт SKU_WB_OZON
 @router.callback_query(F.data=='SKU_WB_OZON')
-async def process_callback_command_sku_wb(callback: CallbackQuery):
+async def process_callback_command_sku_wb_ozon(callback: CallbackQuery):
     kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU_WB_OZON)
     await callback.message.edit_text(text="Выбери SKU", reply_markup=kb)
 

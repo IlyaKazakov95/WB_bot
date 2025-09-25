@@ -23,8 +23,8 @@ button_sku_wb_ozon = InlineKeyboardButton(text="WB+Ozon by sku", callback_data="
 keyboard_WB = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2, button_back]])
 keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2, button_back]])
 
-keyboard_WB_new = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2], [button_sku_wb, button_sku_wb_ozon, button_back]])
-keyboard_Ozon_new = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2], [button_sku_ozon, button_sku_wb_ozon, button_back]])
+keyboard_WB_new = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2], [button_sku_wb, button_sku_wb_ozon], [button_back]])
+keyboard_Ozon_new = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2], [button_sku_ozon, button_sku_wb_ozon], [button_back]])
 
 keyboard_WB_middle = InlineKeyboardMarkup(inline_keyboard=[[button_sku_wb, button_back_middle_wb]])
 keyboard_Ozon_middle = InlineKeyboardMarkup(inline_keyboard=[[button_sku_ozon, button_back_middle_ozon]])
