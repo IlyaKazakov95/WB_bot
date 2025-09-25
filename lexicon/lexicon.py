@@ -39,5 +39,5 @@ for index, row in df2.iterrows():
 df4 = df[["barcode", "Наименование"]].reset_index()
 LEXICON_PRODUCT_RU_WB_OZON: dict[str, str] = {}
 for index, row in df4.iterrows():
-    LEXICON_PRODUCT_RU_WB[str(row["barcode"])+'_'] = row['Наименование']
+    LEXICON_PRODUCT_RU_WB_OZON[str(row["barcode"])+'_'] = row['Наименование']
 
