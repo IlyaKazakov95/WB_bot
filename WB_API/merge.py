@@ -181,3 +181,90 @@ def wb_order_graphics_by_sku(filter=None):
     plt.savefig(img_path, dpi=300)
     plt.close()
     return img_path
+
+
+
+def wb_ozon_order_graphics_by_sku(filter=None):
+    # блок WB
+    current_file = Path(__file__).resolve()
+    orders_file = current_file.parent / 'wb_orders_history.xlsx'
+    df = pd.read_excel(orders_file)
+    df['date'] = pd.to_datetime(df['date'])
+    df['date_new'] = df['date'].dt.date
+    df['year'] = df['date'].dt.year
+    df['week'] = df['date'].dt.isocalendar().week  # ISO-неделя
+    df = df[df.is_cancel == False]
+    df_all_weeks = df.groupby(['year', 'week']).agg(total_sales=('is_cancel', 'count')).reset_index() # создаем все недели, чтобы потом объединить
+    df_all_weeks['year_week'] = df_all_weeks['year'].astype(str) + '-W' + df_all_weeks['week'].astype(str)
+    if filter is not None:
+        df = df[df['barcode']==int(filter)]
+    df_grouped_week = df.groupby(['year', 'week', 'barcode']).agg(total_sales=('is_cancel', 'count')).reset_index()
+    df_grouped_week['year_week'] = df_grouped_week['year'].astype(str) + '-W' + df_grouped_week['week'].astype(str)
+    df_all_weeks = df_all_weeks[['year_week']].merge(df_grouped_week[['year_week','total_sales', 'barcode']], left_on = "year_week", right_on = "year_week", how='left')
+    df_mapping = read_xls()
+    df_mapping = df_mapping[['barcode', 'Наименование', 'Ozon_SKU']]
+    df_all_weeks = df_all_weeks.merge(df_mapping, left_on='barcode',
+                               right_on='barcode', how='left')
+    df_all_weeks["site"] = "Wildberries"
+    # блок Озона
+    orders_file = current_file.parent / 'ozon_orders.xlsx'
+    df = pd.read_excel(orders_file)
+    df['created_at'] = pd.to_datetime(df['created_at'])
+    df['date'] = df['created_at'].dt.date
+    df['year'] = df['created_at'].dt.year
+    df['week'] = df['created_at'].dt.isocalendar().week  # ISO-неделя
+    df_all_weeks2 = df.groupby(['year', 'week']).agg(total_sales=('quantity', 'sum')).reset_index() # создаем все недели, чтобы потом объединить
+    df_all_weeks2['year_week'] = df_all_weeks2['year'].astype(str) + '-W' + df_all_weeks2['week'].astype(str)
+    if filter is not None:
+        filter2 = df_all_weeks['Ozon_SKU'].iloc[0]
+        df = df[df['sku']==int(filter2)]
+    df_grouped_week = df.groupby(['year', 'week']).agg(total_sales=('quantity', 'sum')).reset_index()
+    df_grouped_week['year_week'] = df_grouped_week['year'].astype(str) + '-W' + df_grouped_week['week'].astype(str)
+    df_all_weeks2 = df_all_weeks2[['year_week']].merge(df_grouped_week[['year_week','total_sales']], left_on = "year_week", right_on = "year_week", how='left')
+    df_all_weeks2["barcode"] = df_all_weeks['barcode'].iloc[0]
+    df_all_weeks2["Наименование"] = df_all_weeks['Наименование'].iloc[0]
+    df_all_weeks2["Ozon_SKU"] = df_all_weeks['Ozon_SKU'].iloc[0]
+    df_all_weeks2["site"] = "Ozon"
+    df_total = pd.concat([df_all_weeks, df_all_weeks2])
+    # строим накопленную диаграмму
+    custom_palette = {
+        "Wildberries": "purple",
+        "Ozon": "blue",
+    }
+    plt.figure(figsize=(12, 6))
+    sns.histplot(
+        data=df_total,
+        x="year_week",
+        weights="total_sales",
+        hue="site",
+        multiple="stack",
+        shrink=0.8,
+        alpha=0.6,
+        palette=custom_palette,
+        edgecolor="black", # чёрный контур
+        linewidth=1.1
+    )
+    weeks = df_total['year_week'].unique()
+    # Разрежение меток по оси X
+    step = 5  # показывать каждую 5-ю дату
+    plt.xticks(
+        ticks=range(0, len(weeks), step),
+        labels=weeks[::step],
+        rotation=60,
+        fontsize=9
+    )
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.xlabel("")
+    plt.ylabel("Заказано, штук")
+    timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    if filter:
+        filter_name = df_all_weeks['Наименование'].iloc[0]
+        plt.title(filter_name)
+        img_name = f"wb_and_ozon_sales_sku_{filter}_{timestamp}.png"
+    else:
+        plt.title("Заказы WB + Ozon")
+        img_name = f"wb_and_ozon_sales_all_{timestamp}.png"
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)
+    plt.close()
+    return img_path
