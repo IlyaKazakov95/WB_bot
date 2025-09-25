@@ -81,11 +81,11 @@ async def process_orders_command(callback: CallbackQuery):
     await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_WB_middle)
 
 # Этот хендлер срабатывает на команды по баркодам WB+Ozon
-@router.callback_query(lambda x: x.data.replace('-','').isdigit() and len(x.data)==14)
+@router.callback_query(lambda x: x.data[:13].isdigit() and len(x.data)==14)
 async def process_wb_ozon_orders_by_sku_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
     await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBoAxo1T0CWmgAAd9LBBsSgBfSmVO2zb4AAlYfAAINfSFIvx1T2IVUIiM2BA')
-    img_path = wb_ozon_order_graphics_by_sku(filter=str(callback.data.replace('-','')))
+    img_path = wb_ozon_order_graphics_by_sku(filter=str(callback.data[:13]))
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
