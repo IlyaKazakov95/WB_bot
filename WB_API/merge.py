@@ -94,6 +94,8 @@ def stock_process():
     df_full = df_mapping.merge(df[['barcode', 'Всего находится на складах', 'Поставки + Возвраты в пути']], left_on='barcode',
                                right_on='barcode', how='left')
     df_orders_group = df_orders.groupby('barcode').agg(total_sales=("is_cancel", "count")).reset_index()
+    df_orders_group['barcode'] = df_orders_group['barcode'].astype(str)
+    df_full['barcode'] = df_full['barcode'].astype(str)
     df_total = df_full.merge(df_orders_group, left_on='barcode', right_on='barcode', how='left')
     df_total['total_sales'] = df_total['total_sales'].fillna(0)
     df_total['Всего находится на складах'] = df_total['Всего находится на складах'].fillna(0)
