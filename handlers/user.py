@@ -4,7 +4,7 @@ from lexicon.lexicon import LEXICON_RU, LEXICON_PRODUCT_RU, LEXICON_PRODUCT_RU_W
 import os
 from aiogram import Router, F
 from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku
-from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new
+from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new, keyboard_Ozon_middle, keyboard_WB_middle
 from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
 from WB_API.ozon_stock_extract import ozon_stock_extract
 
@@ -41,6 +41,16 @@ async def process_callback_command_Ozon(callback: CallbackQuery):
 async def process_callback_command_back(callback: CallbackQuery):
     await callback.message.edit_text(text="Выбери площадку", reply_markup=keyboard_start)
 
+# Этот хэндлер будет срабатывать на апдейт Back_Middle_WB
+@router.callback_query(F.data=='Back_Middle_WB')
+async def process_callback_command_back_wb(callback: CallbackQuery):
+    await callback.message.edit_text(text="Wildberries", reply_markup=keyboard_WB_new)
+
+# Этот хэндлер будет срабатывать на апдейт Back_Middle_Ozon
+@router.callback_query(F.data=='Back_Middle_Ozon')
+async def process_callback_command_back_ozon(callback: CallbackQuery):
+    await callback.message.edit_text(text="Ozon", reply_markup=keyboard_Ozon_new)
+
 # Этот хэндлер будет срабатывать на апдейт SKU_WB
 @router.callback_query(F.data=='SKU_WB')
 async def process_callback_command_sku_wb(callback: CallbackQuery):
@@ -62,14 +72,13 @@ async def process_orders_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU_WB)
-    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_WB_middle)
 
 # Этот хендлер срабатывает на команды по баркодам
 @router.callback_query(lambda x: x.data.isdigit() and len(x.data)==13)
 async def process_wb_orders_by_sku_command(callback: CallbackQuery):
     await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
-    await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBn_Zo1TWDRQUUmvRAcS42KMvEcRDCDwACOgIAArbwKxSgT06n0Vzn4DYE')
+    await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBoAxo1T0CWmgAAd9LBBsSgBfSmVO2zb4AAlYfAAINfSFIvx1T2IVUIiM2BA')
     img_path = wb_order_graphics_by_sku(filter=str(callback.data))
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
@@ -98,8 +107,7 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
-    kb = create_inline_kb(width=1, **LEXICON_PRODUCT_RU)
-    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=kb)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_Ozon_middle)
 
 # Этот хендлер срабатывает на команды по ozon_sku
 @router.callback_query(lambda x: x.data.isdigit() and (len(x.data)==10 or len(x.data)==9))
