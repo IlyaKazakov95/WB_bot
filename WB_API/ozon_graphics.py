@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import numpy as np
 from plotly.subplots import make_subplots
 from pathlib import Path
+import matplotlib.dates as mdates
 
 def ozon_order_graphics():
     current_file = Path(__file__).resolve()
@@ -32,14 +33,26 @@ def ozon_order_graphics():
         color='blue',  # цвет заливки
         alpha=0.3  # прозрачность
     )
+    # ===== Среднее значение =====
+    mean_val = df_grouped['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
 
-    # Горизонтальная пунктирная линия на y=70
-    plt.axhline(
-        y=70,
-        color='red',
-        linestyle='--',  # пунктир
-        linewidth=1
+    # ===== Линия тренда =====
+    x = np.arange(len(df_grouped))
+    y = df_grouped['total_sales'].values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        coef = np.polyfit(x, y, 1)  # линейная регрессия (степень 1)
+        trend = np.polyval(coef, x)
+        plt.plot(df_grouped['date'], trend, color='blue', linestyle='--', linewidth=2, label="Тренд")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
     )
+
     # Настройка оси X для дат
     plt.xticks(rotation=45)
     plt.xlabel("")
@@ -91,6 +104,25 @@ def ozon_order_graphics_by_sku(filter=None):
         labels=df_all_weeks['year_week'][::step],
         rotation=70,
         fontsize=9
+    )
+    # ===== Среднее значение =====
+    mean_val = df_all_weeks['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
+
+    # ===== Линия тренда =====
+    x = np.arange(len(df_all_weeks))
+    y = df_all_weeks['total_sales'].fillna(0).values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        coef = np.polyfit(x, y, 1)  # линейная регрессия (степень 1)
+        trend = np.polyval(coef, x)
+        plt.plot(df_all_weeks['year_week'], trend, color='blue', linestyle='--', linewidth=2, label="Тренд")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
     )
     plt.xlabel("")
     plt.ylabel(f"Заказано, штук")
@@ -165,3 +197,85 @@ def ozon_order_graphics_by_sku(filter=None):
 # fig.write_html("ozon_sales_with_table.html")
 #
 # fig.show()
+
+def ozon_order_graphics_3_month():
+    current_file = Path(__file__).resolve()
+    orders_file = current_file.parent / 'ozon_orders.xlsx'
+    df = pd.read_excel(orders_file)
+    df['created_at'] = pd.to_datetime(df['created_at'], utc=True)
+    date_filter = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=90)  # UTC для совпадения с колонкой
+    df = df[df['created_at']>date_filter]
+    df['date'] = df['created_at'].dt.date
+    df_grouped = df.groupby('date').agg(total_sales=("quantity", "sum")).reset_index()
+
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(
+        data=df_grouped,
+        x='date',
+        y='total_sales',
+        color='blue'
+    )
+    # заливка под линией
+    plt.fill_between(
+        df_grouped['date'],
+        df_grouped['total_sales'],
+        color='blue',  # цвет заливки
+        alpha=0.3  # прозрачность
+    )
+
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    plt.xticks(rotation=70)
+    # yesterday и today
+    today = dt.date.today()
+    yesterday = today - dt.timedelta(days=1)
+    # получаем значение за вчера
+    yest_value = df_grouped.loc[df_grouped["date"] == yesterday, "total_sales"]
+    if not yest_value.empty:
+        yest_value = yest_value.values[0]
+    else:
+        yest_value = None
+    # горизонтальная пунктирная линия по вчерашнему значению
+    if yest_value is not None:
+        plt.axhline(y=yest_value, color="black", linestyle="--", alpha=0.6)
+        plt.scatter(df_grouped.loc[df_grouped["date"] == yesterday, "date"], yest_value,
+                    color="black", zorder=5, s=80, label=f"Вчера: {yest_value:.1f}")
+    # зеленая точка на сегодняшней дате
+    today_value = df_grouped.loc[df_grouped["date"] == today, "total_sales"]
+    if not today_value.empty:
+        plt.scatter(df_grouped.loc[df_grouped["date"] == today, "date"], today_value,
+                    color="green", zorder=5, s=80, label=f"Сегодня: {today_value.values[0]:.1f}")
+    # ===== Среднее значение =====
+    mean_val = df_grouped['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
+
+    # ===== Линия тренда =====
+    x = np.arange(len(df_grouped))
+    y = df_grouped['total_sales'].values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        coef = np.polyfit(x, y, 1)  # линейная регрессия (степень 1)
+        trend = np.polyval(coef, x)
+        plt.plot(df_grouped['date'], trend, color='blue', linestyle='--', linewidth=2, label="Тренд")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
+    )
+
+    # Настройка оси X для дат
+    plt.xticks(rotation=45)
+    plt.xlabel("")
+    plt.ylabel("Заказано, штук")
+    plt.title("Заказы по датам")
+    plt.tight_layout()
+    timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'ozon_sales_by_date_3_month {timestamp}.png'
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)
+    plt.close()
+    return img_path
+ozon_order_graphics_3_month()

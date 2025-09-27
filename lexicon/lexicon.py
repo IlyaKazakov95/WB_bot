@@ -27,16 +27,19 @@ current_file = Path(__file__).resolve()
 file = current_file.parent / 'Mapping.xlsx'
 df = pd.read_excel(file)
 df3 = df[["Ozon_SKU", "Наименование"]].reset_index()
+df3 = df3.sort_values(by = ["Наименование"], ascending = False)
 LEXICON_PRODUCT_RU: dict[str, str] = {}
 for index, row in df3.iterrows():
     LEXICON_PRODUCT_RU[str(row['Ozon_SKU'])] = row['Наименование']
 
 df2 = df[["barcode", "Наименование"]].reset_index()
+df2 = df2.sort_values(by = ["Наименование"], ascending = False)
 LEXICON_PRODUCT_RU_WB: dict[str, str] = {}
 for index, row in df2.iterrows():
     LEXICON_PRODUCT_RU_WB[str(row['barcode'])] = row['Наименование']
 
 df4 = df[["barcode", "Наименование"]].reset_index()
+df4 = df4.sort_values(by = ["Наименование"], ascending = False)
 LEXICON_PRODUCT_RU_WB_OZON: dict[str, str] = {}
 for index, row in df4.iterrows():
     LEXICON_PRODUCT_RU_WB_OZON[str(row["barcode"])+'_'] = row['Наименование']

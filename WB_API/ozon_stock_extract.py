@@ -6,6 +6,7 @@ import pandas as pd
 from lexicon import *
 import datetime as dt
 from pathlib import Path
+from openpyxl import load_workbook
 
 def stock_status(x):
     if x == 0 or x is None:
@@ -65,8 +66,27 @@ def ozon_stock_extract():
     df_full['stock_cover'] = df_full.apply(lambda x: int(x['Available_Stock']/x['total_sales_3_months']*90) if x['total_sales_3_months'] > 0 else x['Available_Stock'], axis=1)
     df_full = df_full.sort_values(by=['total_sales_3_months'], ascending=False)
     df_full['stock_status'] = df_full.apply(lambda x: stock_status(x['stock_cover']), axis=1)
+    dict_sort = {"high stock": 0, "normal stock": 1, "low stock": 2, "zero stock": 3}
+    df_full['stock_sort'] = df_full.apply(lambda x: dict_sort[x['stock_status']], axis=1)
+    df_full = df_full.sort_values(["stock_sort", "total_sales_3_months"], ascending=[False, False])
+    df_full = df_full.drop("stock_sort", axis=1)
     file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     file_name = f'ozon_stock {file_date}.xlsx'
     file_path = Path(__file__).parent / file_name
     df_full.to_excel(file_path, sheet_name='Sheet1', index=False)
+    # Подгон ширины колонок под заголовок + данные
+    ozon = load_workbook(file_path)
+    ws = ozon.active
+    for col in ws.columns:
+        col_letter = col[0].column_letter
+        max_length = 0
+        for cell in col:
+            try:
+                if cell.value:  # если значение есть
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        ws.column_dimensions[col_letter].width = max_length + 1  # небольшой запас
+    ws.column_dimensions['B'].width = 50
+    ozon.save(file_path)
     return file_path

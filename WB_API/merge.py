@@ -10,6 +10,10 @@ import time
 import pandas as pd
 import datetime as dt
 from pathlib import Path
+import matplotlib.dates as mdates
+from openpyxl import load_workbook
+import numpy as np
+import matplotlib.patches as mpatches
 
 def orders_process():
     xlsx_path = Path(__file__).parent / "wb_orders_history.xlsx"
@@ -17,7 +21,7 @@ def orders_process():
     df_orders = df_orders[df_orders.is_cancel == False]  # А нужно ли удалять?
     df_orders['date'] = pd.to_datetime(df_orders['date'])
     df_orders['date_only'] = df_orders['date'].dt.date
-    df_orders_by_date = df_orders.groupby('date_only').agg(total_sales=("is_cancel", "count"))
+    df_orders_by_date = df_orders.groupby('date_only').agg(total_sales=("is_cancel", "count")).reset_index()
     plt.figure(figsize=(12, 6))
     sns.lineplot(
         data=df_orders_by_date,
@@ -27,18 +31,30 @@ def orders_process():
     )
     # заливка под линией
     plt.fill_between(
-        df_orders_by_date.index,
+        df_orders_by_date['date_only'],
         df_orders_by_date['total_sales'],
         color='blue',  # цвет заливки
         alpha=0.3  # прозрачность
     )
+    # ===== Среднее значение =====
+    mean_val = df_orders_by_date['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
 
-    # Горизонтальная пунктирная линия на y=100
-    plt.axhline(
-        y=100,
-        color='red',
-        linestyle='--',  # пунктир
-        linewidth=1
+    # ===== Линия тренда =====
+    x = np.arange(len(df_orders_by_date))
+    y = df_orders_by_date['total_sales'].values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        coef = np.polyfit(x, y, 1)  # линейная регрессия (степень 1)
+        trend = np.polyval(coef, x)
+        slope = coef[0]
+        plt.plot(df_orders_by_date['date_only'], trend, color='blue', linestyle='--', linewidth=2, label=f"Тренд (наклон: {slope:.2f})")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
     )
     # Настройка оси X для дат
     plt.xticks(rotation=45)
@@ -102,11 +118,29 @@ def stock_process():
     df_total['Поставки + Возвраты в пути'] = df_total['Поставки + Возвраты в пути'].fillna(0)
     df_total['stock_cover'] = df_total.apply(lambda x: int((x['Всего находится на складах'] + x['Поставки + Возвраты в пути'])/x['total_sales']*90) if x['total_sales'] > 0 else x['Всего находится на складах'], axis=1)
     df_total['stock_status'] = df_total.apply(lambda x: stock_status(x['stock_cover']), axis=1)
-    df_total = df_total.sort_values(by="total_sales", ascending=False)
+    dict_sort = {"high stock": 0, "normal stock": 1, "low stock": 2, "zero stock": 3}
+    df_total['stock_sort'] = df_total.apply(lambda x: dict_sort[x['stock_status']], axis=1)
+    df_total = df_total.sort_values(["stock_sort","total_sales"], ascending=[False, False])
+    df_total = df_total.drop("stock_sort", axis=1)
     file_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     file_name = f'WB_stock {file_date}.xlsx'
     file_path = Path(__file__).parent / file_name
     df_total.to_excel(file_path, sheet_name="Sheet1", index=False)
+    # Подгон ширины колонок под заголовок + данные
+    wb = load_workbook(file_path)
+    ws = wb.active
+    for col in ws.columns:
+        col_letter = col[0].column_letter
+        max_length = 0
+        for cell in col:
+            try:
+                if cell.value:  # если значение есть
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        ws.column_dimensions[col_letter].width = max_length + 1  # небольшой запас
+    ws.column_dimensions['B'].width = 50
+    wb.save(file_path)
     return file_path
 
 def union_sales():
@@ -160,6 +194,25 @@ def wb_order_graphics_by_sku(filter=None):
         alpha=0.6,
         edgecolor='black',
         linewidth=1
+    )
+    # ===== Среднее значение =====
+    mean_val = df_all_weeks['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
+
+    # ===== Линия тренда =====
+    x = np.arange(len(df_all_weeks))
+    y = df_all_weeks['total_sales'].fillna(0).values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        z = np.polyfit(x, y, 1)   # линейная аппроксимация
+        p = np.poly1d(z)
+        plt.plot(x, p(x), "b--", linewidth=2, label="Тренд")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
     )
     # Разрежение меток по оси X
     step = 2  # показывать каждую 5-ю дату
@@ -232,8 +285,10 @@ def wb_ozon_order_graphics_by_sku(filter=None):
         "Wildberries": "purple",
         "Ozon": "blue",
     }
+    # ===== Построение графиков =====
     plt.figure(figsize=(12, 6))
-    sns.histplot(
+    # Ставим legend=False, чтобы Seaborn не строил свою
+    bar_plot = sns.histplot(
         data=df_total,
         x="year_week",
         weights="total_sales",
@@ -242,9 +297,35 @@ def wb_ozon_order_graphics_by_sku(filter=None):
         shrink=0.8,
         alpha=0.6,
         palette=custom_palette,
-        edgecolor="black", # чёрный контур
-        linewidth=1.1
+        edgecolor="black",
+        linewidth=1.1,
+        legend=False
     )
+
+    # ===== Линия тренда =====
+    x = np.arange(len(df_total['year_week'].unique()))
+    y = df_total.groupby(['year_week']).agg(total_sales_w=('total_sales', 'sum')).reset_index()['total_sales_w'].fillna(
+        0).values
+    if len(x) > 1:
+        coef = np.polyfit(x, y, 1)
+        trend_line, = plt.plot(df_total['year_week'].unique(), np.polyval(coef, x),
+                               color='blue', linestyle='--', linewidth=2, label="Тренд")
+
+    # ===== Среднее значение =====
+    mean_val = df_total['total_sales'].mean()
+    mean_line = plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
+
+    # ===== Легенда вручную =====
+    # Патчи для цветов Ozon и Wildberries
+    ozon_patch = mpatches.Patch(color=custom_palette['Ozon'], label='Ozon')
+    wb_patch = mpatches.Patch(color=custom_palette['Wildberries'], label='Wildberries')
+
+    plt.legend(handles=[wb_patch, ozon_patch, trend_line, mean_line],
+               loc="upper right",
+               frameon=True,
+               fancybox=True,
+               shadow=True,
+               fontsize=10)
     weeks = df_total['year_week'].unique()
     # Разрежение меток по оси X
     step = 5  # показывать каждую 5-ю дату
@@ -254,6 +335,7 @@ def wb_ozon_order_graphics_by_sku(filter=None):
         rotation=60,
         fontsize=9
     )
+
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.xlabel("")
     plt.ylabel("Заказано, штук")
@@ -267,5 +349,84 @@ def wb_ozon_order_graphics_by_sku(filter=None):
         img_name = f"wb_and_ozon_sales_all_{timestamp}.png"
     img_path = Path(__file__).parent / img_name
     plt.savefig(img_path, dpi=300)
+    plt.close()
+    return img_path
+
+def orders_process_3_month():
+    xlsx_path = Path(__file__).parent / "wb_orders_history.xlsx"
+    df_orders = pd.read_excel(xlsx_path)  #датафрейми с продажами
+    df_orders = df_orders[df_orders.is_cancel == False] # А нужно ли удалять?
+    date_filter = dt.datetime.today() - dt.timedelta(days=90)
+    df_orders = df_orders[df_orders['date'] > date_filter]
+    df_orders['date'] = pd.to_datetime(df_orders['date'])
+    df_orders['date_only'] = df_orders['date'].dt.date
+    df_orders_by_date = df_orders.groupby('date_only').agg(total_sales=("is_cancel", "count")).reset_index()
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(
+        data=df_orders_by_date,
+        x='date_only',
+        y='total_sales',
+        color='blue'
+    )
+    # заливка под линией
+    plt.fill_between(
+        df_orders_by_date['date_only'],
+        df_orders_by_date['total_sales'],
+        color='blue',  # цвет заливки
+        alpha=0.3  # прозрачность
+    )
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    plt.xticks(rotation=70)
+    # yesterday и today
+    today = dt.date.today()
+    yesterday = today - dt.timedelta(days=1)
+    # получаем значение за вчера
+    yest_value = df_orders_by_date.loc[df_orders_by_date["date_only"] == yesterday, "total_sales"]
+    if not yest_value.empty:
+        yest_value = yest_value.values[0]
+    else:
+        yest_value = None
+    # горизонтальная пунктирная линия по вчерашнему значению
+    if yest_value is not None:
+        plt.axhline(y=yest_value, color="black", linestyle="--", alpha=0.6)
+        plt.scatter(df_orders_by_date.loc[df_orders_by_date["date_only"] == yesterday, "date_only"], yest_value,
+                    color="black", zorder=5, s=80, label=f"Вчера: {yest_value:.1f}")
+    # красная точка на сегодняшней дате
+    today_value = df_orders_by_date.loc[df_orders_by_date["date_only"] == today, "total_sales"]
+    if not today_value.empty:
+        plt.scatter(df_orders_by_date.loc[df_orders_by_date["date_only"] == today, "date_only"], today_value,
+                    color="green", zorder=5, s=80, label=f"Сегодня: {today_value.values[0]:.1f}")
+
+    # ===== Среднее значение =====
+    mean_val = df_orders_by_date['total_sales'].mean()
+    plt.axhline(mean_val, color="red", linestyle="--", linewidth=1.5, label=f"Среднее: {mean_val:.1f}")
+
+    # ===== Линия тренда =====
+    x = np.arange(len(df_orders_by_date))
+    y = df_orders_by_date['total_sales'].fillna(0).values
+    if len(x) > 1:  # тренд только если есть больше одной точки
+        coef = np.polyfit(x, y, 1)  # линейная регрессия (степень 1)
+        trend = np.polyval(coef, x)
+        plt.plot(df_orders_by_date['date_only'], trend, color='blue', linestyle='--', linewidth=2, label="Тренд")
+
+    plt.legend(
+        loc="upper right",       # где разместить (можно 'upper left', 'lower right' и т.д.)
+        frameon=True,            # включаем рамку
+        fancybox=True,           # скруглённые углы
+        shadow=True,             # тень под рамкой
+        fontsize=10
+    )
+    # Настройка оси X для дат
+    plt.xlabel("")
+    plt.ylabel("Количество заказов")
+    plt.legend()
+    plt.tight_layout()
+    img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'sales_by_date_3_month {img_date}.png'
+    plt.title(f"Заказы по датам. Время формирования отчета {img_date}")
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)  # сохранение картинки
     plt.close()
     return img_path

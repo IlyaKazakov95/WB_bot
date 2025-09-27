@@ -3,9 +3,9 @@ from aiogram.filters import Command, CommandStart
 from lexicon.lexicon import LEXICON_RU, LEXICON_PRODUCT_RU, LEXICON_PRODUCT_RU_WB, LEXICON_PRODUCT_RU_WB_OZON
 import os
 from aiogram import Router, F
-from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku, wb_ozon_order_graphics_by_sku
+from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku, wb_ozon_order_graphics_by_sku, orders_process_3_month
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new, keyboard_Ozon_middle, keyboard_WB_middle
-from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku
+from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku, ozon_order_graphics_3_month
 from WB_API.ozon_stock_extract import ozon_stock_extract
 from WB_API.ozon_orders_extract import ozon_extract_orders
 
@@ -81,6 +81,17 @@ async def process_orders_command(callback: CallbackQuery):
     await callback.message.reply_photo(photo=img)
     await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_WB_middle)
 
+# Этот хендлер срабатывает на команду /WB_Orders_3_Months
+@router.callback_query(F.data=='/WB_Orders_3_Months')
+async def process_orders_3_month_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(sticker='CAACAgIAAxkBAAEBoO5o17z5o4ICjxFyaKQj-9lrclXkzgAChB4AAsLNqEoDL_BkvnzjazYE')
+    img_path = orders_process_3_month()
+    img = FSInputFile(img_path)
+    await callback.message.answer(text=LEXICON_RU['/orders'])
+    await callback.message.reply_photo(photo=img)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_WB_middle)
+
 # Этот хендлер срабатывает на команды по баркодам WB+Ozon
 @router.callback_query(lambda x: x.data[:13].isdigit() and len(x.data)==14)
 async def process_wb_ozon_orders_by_sku_command(callback: CallbackQuery):
@@ -122,6 +133,18 @@ async def process_ozon_orders_command(callback: CallbackQuery):
     await callback.message.reply_sticker(
         sticker='CAACAgIAAxkBAAEBn_po1TZEEJPwpjvIiOWN3m85KUUiUwACXxwAApcAAahK5rAVXgI1dfI2BA')
     img_path = ozon_order_graphics()
+    img = FSInputFile(img_path)
+    await callback.message.answer(text=LEXICON_RU['/orders'])
+    await callback.message.reply_photo(photo=img)
+    await callback.message.answer(text="Можно посмотреть детальнее по sku", reply_markup=keyboard_Ozon_middle)
+
+# Этот хендлер срабатывает на команду /Ozon_Orders_3_Months
+@router.callback_query(F.data=='/Ozon_Orders_3_Months')
+async def process_ozon_orders_3_month_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBoOxo17xtpJVojv1H--s88ikl9W_8lQACNDMAAuM4eEq5VO2KVCH-FTYE')
+    img_path = ozon_order_graphics_3_month()
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/orders'])
     await callback.message.reply_photo(photo=img)
