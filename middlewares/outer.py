@@ -52,10 +52,9 @@ class OuterMiddleware(BaseMiddleware):
                 ))
                 logger.info(f"🆕 Новый пользователь: {user_id} ({user.username})")
 
-            await self.redis.set(key, json.dumps(user_data), ex=86400 * 30)
+            await self.redis.set(key, json.dumps(user_data), ex=86400 * 360)
             data["user_dict"] = user_data
-
+            data["redis"] = self.redis
         except Exception as e:
             logger.exception(f"❌ Ошибка в OuterMiddleware для user_id={user_id}: {e}")
-
         return await handler(event, data)
