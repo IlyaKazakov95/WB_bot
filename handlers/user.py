@@ -10,6 +10,8 @@ from WB_API.ozon_stock_extract import ozon_stock_extract, ozon_stock_history
 from WB_API.ozon_orders_extract import ozon_extract_orders
 from WB_API.wb_stock_history import stock_history_extract
 from WB_API.wb_unite_stock_orders import wb_stock_orders_unite
+import json
+from redis.asyncio import Redis
 
 # Инициализируем роутер уровня модуля
 router = Router()
@@ -221,19 +223,23 @@ async def process_who_command(message: Message):
 
 # Этот хендлер срабатывает на команду /stat
 @router.message(F.text == '/stat')
-async def process_stat_command(message: Message, user_dict: dict):
-    if not user_dict:
+async def process_stat_command(message: Message, redis: Redis):
+    keys = await redis.keys("user:*")
+    if not not keys:
         await message.answer("Нет данных о пользователях.")
         return
 
     text = "📊 Статистика:\n\n"
-    for uid, db in user_dict.items():
+    for key in keys:
+        user_json = await redis.get(key)
+        if not user_json:
+            continue
+        user_data = json.loads(user_json)
         text += (
-            f"👤 {db.username}\n"
-            f"Запросов: {db.requests_qty}\n"
-            f"Последний: {db.last_requests_date}\n\n"
+            f"👤 {user_data['username']}\n"
+            f"Запросов: {user_data['requests_qty']}\n"
+            f"Последний: {user_data['last_requests_date']}\n\n"
         )
-
     await message.answer(text)
 
 # Этот хендлер срабатывает на команду /wb_update
