@@ -15,33 +15,47 @@ class OuterMiddleware(BaseMiddleware):
     def __init__(self, redis: Redis):
         super().__init__()
         self.redis = redis
+
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
         data: dict[str, Any]
-        ) -> Any:
-        logger.debug("OuterMiddleware запущена")
-        user = getattr(event, "from_user", None)
+    ) -> Any:
+        user: User | None = None
+
+        # пытаемся достать пользователя из события
+        if hasattr(event, "from_user"):
+            user = event.from_user
+        elif "event_from_user" in data:
+            user = data["event_from_user"]
+
         if not user:
+            logger.debug("⛔ Middleware: событие без пользователя, пропускаем.")
             return await handler(event, data)
 
+        user_id = user.id
         key = f"user:{user_id}"
-        user_json = await self.redis.get(key)
-        if user_json:
-            user_data = json.loads(user_json)
-            user_data["requests_qty"] += 1
-            user_data["last_requests_date"] = str(dt.datetime.now())
-            logger.info(f"Обновлены данные пользователя {user.id} ({user.first_name} {user.last_name}): "
-                        f"requests_qty={user_data['requests_qty']}")
-        else:
-            user_data = asdict(Database(
-                username=f"{user.first_name} {user.last_name}",
-                requests_qty=1,
-                last_requests_date=str(dt.datetime.now())
-            ))
-            logger.info(f"Обновлены данные пользователя {user.id} ({user.first_name} {user.last_name}): "
-                        f"requests_qty={user_data['requests_qty']}")
-        await self.redis.set(key, json.dumps(user_data), ex=86400 * 360)
-        data["redis"] = self.redis
+
+        try:
+            user_json = await self.redis.get(key)
+            if user_json:
+                user_data = json.loads(user_json)
+                user_data["requests_qty"] += 1
+                user_data["last_requests_date"] = str(dt.datetime.now())
+                logger.info(f"🔄 Обновлены данные пользователя {user_id} ({user.username})")
+            else:
+                user_data = asdict(Database(
+                    username=f"{user.first_name or ''} {user.last_name or ''}".strip(),
+                    requests_qty=1,
+                    last_requests_date=str(dt.datetime.now())
+                ))
+                logger.info(f"🆕 Новый пользователь: {user_id} ({user.username})")
+
+            await self.redis.set(key, json.dumps(user_data), ex=86400 * 30)
+            data["user_dict"] = user_data
+
+        except Exception as e:
+            logger.exception(f"❌ Ошибка в OuterMiddleware для user_id={user_id}: {e}")
+
         return await handler(event, data)
