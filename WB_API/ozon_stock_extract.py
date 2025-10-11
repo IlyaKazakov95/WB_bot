@@ -90,3 +90,39 @@ def ozon_stock_extract():
     ws.column_dimensions['B'].width = 50
     ozon.save(file_path)
     return file_path
+
+def ozon_stock_history():
+    env = Env()
+    env.read_env()
+    # создаем задание на выгрузку товаров Озон
+    url = 'https://api-seller.ozon.ru/v1/report/products/create'
+    response = requests.post(url, headers = {'Client-Id': env('Client_Id'), 'Api-Key': env('API_Key')})
+    task_id = response.json()['result']['code']
+    time.sleep(10)
+    # вставляем задание для выгрузки списка товаров
+    url_report = f'https://api-seller.ozon.ru/v1/report/info'
+    goods = requests.post(url_report, headers = {'Client-Id': env('Client_Id'), 'Api-Key': env('API_Key'), 'Content-Type': 'application/json'}, json = {'code': task_id})
+    file = goods.json()['result']['file']
+    df = pd.read_csv(file, sep=';')
+    skus = [int(i) for i in list(df['SKU'])[:100]] # Ограничение на 100 skus
+    # передаем список товаров в качестве обязательно параметра для выгрузки стоков
+    url_stock = 'https://api-seller.ozon.ru/v1/analytics/stocks'
+    stock = requests.post(url_stock, headers = {'Client-Id': env('Client_Id'), 'Api-Key': env('API_Key'), 'Content-Type': 'application/json'}, json = {'skus': skus})
+    stock = stock.json()
+    df = pd.DataFrame(stock['items'])
+    df = df[df['available_stock_count']>0]
+    df = df[["sku", "warehouse_name", "offer_id", "available_stock_count"]]
+    df['date'] = dt.datetime.today().date()
+    df = df[["date", "sku", "warehouse_name", "offer_id", "available_stock_count"]]
+    df = df.rename(columns={"offer_id": "article", "available_stock_count": "stock"})
+    xlsx_path = Path(__file__).parent / "ozon_stock_history.xlsx"
+    df_history = pd.read_excel(xlsx_path)
+    if pd.to_datetime(df_history['date']).max().date() == dt.datetime.today().date():
+        return xlsx_path
+    else:
+        book = load_workbook(xlsx_path)
+        sheet_name = "Sheet1"
+        startrow = book[sheet_name].max_row
+        with pd.ExcelWriter(xlsx_path, engine="openpyxl", mode="a", if_sheet_exists="overlay") as writer:
+            df.to_excel(writer, sheet_name=sheet_name, startrow=startrow, index=False, header=False)
+        return xlsx_path

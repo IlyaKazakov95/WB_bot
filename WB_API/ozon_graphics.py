@@ -278,3 +278,51 @@ def ozon_order_graphics_3_month():
     plt.savefig(img_path, dpi=300)
     plt.close()
     return img_path
+
+def ozon_stock_dynamic():
+    xlsx_path = Path(__file__).parent / "ozon_stock_history.xlsx"
+    df = pd.read_excel(xlsx_path)
+    df_group = df.groupby(['date'], as_index=False).agg(stock=('stock', 'sum'))
+    df_group['date'] = pd.to_datetime(df_group['date'])
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(
+        data=df_group,
+        x='date',
+        y='stock',
+        color='red'
+    )
+    # заливка под линией
+    plt.fill_between(
+        df_group['date'],
+        df_group['stock'],
+        color='red',  # цвет заливки
+        alpha=0.3  # прозрачность
+    )
+    # ===== Среднее значение =====
+    mean_val = df_group['stock'].mean()
+    plt.axhline(mean_val, color="blue", linestyle="--", linewidth=1.5, label=f"Средний сток: {mean_val:.1f}")
+    # получаем значение за последний день
+    date_filter = max(df_group['date'])
+    date_value = df_group.loc[df_group["date"] == date_filter, "stock"]
+    if not date_value.empty:
+        date_value = date_value.values[0]
+    else:
+        date_value = None
+    # горизонтальная пунктирная линия по последнему значению стока
+    if date_value is not None:
+        plt.axhline(y=date_value, color="black", linestyle="--", alpha=0.6)
+        plt.scatter(df_group.loc[df_group["date"] == date_filter, "date"], date_value,
+                    color="black", zorder=5, s=80, label=f"Текущий сток: {date_value:.1f}")
+
+    # Настройка оси X для дат
+    plt.xlabel("")
+    plt.ylabel("Уровень товарных запасов Озон")
+    plt.legend()
+    img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'ozon_stock_history {img_date}.png'
+    plt.title(f"Динамика стока Озон. Время формирования отчета {img_date}")
+    plt.tight_layout()
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)  # сохранение картинки
+    plt.close()
+    return img_path

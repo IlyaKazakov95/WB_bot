@@ -23,12 +23,13 @@ button_ozon_3month = InlineKeyboardButton(text="Озон Заказы 3 меся
 button_wb_3month = InlineKeyboardButton(text="ВБ Заказы 3 месяца", callback_data="/WB_Orders_3_Months")
 button_wb_stock = InlineKeyboardButton(text="ВБ Динамика Стока", callback_data="/WB_Stock_history")
 button_wb_expiration = InlineKeyboardButton(text="ВБ ОСГ", callback_data="/WB_Expiration")
+button_ozon_stock = InlineKeyboardButton(text="Озон Динамика Стока", callback_data="/Ozon_Stock_history")
 
-keyboard_WB = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2], [button_wb_3month, button_back], [button_wb_stock, button_wb_expiration]])
-keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2],[button_ozon_3month, button_back]])
+keyboard_WB = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2], [button_wb_stock, button_wb_expiration], [button_wb_3month, button_back]])
+keyboard_Ozon = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2], [button_ozon_stock], [button_ozon_3month, button_back]])
 
 keyboard_WB_new = InlineKeyboardMarkup(inline_keyboard=[[button_1_1, button_1_2], [button_sku_wb, button_sku_wb_ozon], [button_wb_stock, button_wb_expiration], [button_wb_3month, button_back]])
-keyboard_Ozon_new = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2], [button_sku_ozon, button_sku_wb_ozon], [button_ozon_3month, button_back]])
+keyboard_Ozon_new = InlineKeyboardMarkup(inline_keyboard=[[button_2_1, button_2_2], [button_sku_ozon, button_sku_wb_ozon], [button_ozon_stock], [button_ozon_3month, button_back]])
 
 keyboard_WB_middle = InlineKeyboardMarkup(inline_keyboard=[[button_sku_wb, button_back_middle_wb]])
 keyboard_Ozon_middle = InlineKeyboardMarkup(inline_keyboard=[[button_sku_ozon, button_back_middle_ozon]])

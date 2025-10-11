@@ -15,6 +15,8 @@ from WB_API.ozon_orders_extract import ozon_extract_orders
 from WB_API.wb_stock_history import stock_history_extract
 from WB_API.wb_unite_stock_orders import wb_stock_orders_unite
 from WB_API.merge import union_sales
+from WB_API.ozon_stock_extract import ozon_stock_history
+from utils.redis_client import init_redis
 
 async def main() -> None:
     # Загружаем конфиг в переменную config
@@ -23,18 +25,25 @@ async def main() -> None:
     logging.basicConfig(
         level=logging.getLevelName(level=config.log.level),
         format=config.log.format)
+    # Инициализируем Redis клиента
+    redis_client = init_redis(config.redis)
     # Инициализируем бот и диспетчер
     bot = Bot(token=config.bot.token)
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
 
     # создаём планировщик для asyncio
     scheduler = AsyncIOScheduler(timezone=timezone("Europe/Moscow"))
 
     # добавляем задачу: каждый день в 05:00 по Москве
     scheduler.add_job(ozon_extract_orders, 'cron', hour=5, minute=0)
+    scheduler.add_job(ozon_extract_orders, 'cron', hour=14, minute=0)
+    scheduler.add_job(ozon_extract_orders, 'cron', hour=20, minute=0)
     scheduler.add_job(union_sales, 'cron', hour=5, minute=10)
+    scheduler.add_job(union_sales, 'cron', hour=14, minute=10)
+    scheduler.add_job(union_sales, 'cron', hour=20, minute=10)
     scheduler.add_job(stock_history_extract, 'cron', hour=5, minute=20)
     scheduler.add_job(wb_stock_orders_unite, 'cron', hour=5, minute=35)
+    scheduler.add_job(ozon_stock_history, 'cron', hour=5, minute=45)
 
     # запускаем планировщик
     scheduler.start()
@@ -46,7 +55,7 @@ async def main() -> None:
     dp.include_router(user.router)
 
     # Регистрируем миддлвари
-    dp.update.outer_middleware(OuterMiddleware())
+    dp.update.outer_middleware(OuterMiddleware(redis_client))
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)

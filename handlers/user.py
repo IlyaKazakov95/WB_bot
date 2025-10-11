@@ -5,8 +5,8 @@ import os
 from aiogram import Router, F
 from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku, wb_ozon_order_graphics_by_sku, orders_process_3_month, wb_stock_dynamic, wb_expiration_date
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new, keyboard_Ozon_middle, keyboard_WB_middle
-from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku, ozon_order_graphics_3_month
-from WB_API.ozon_stock_extract import ozon_stock_extract
+from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku, ozon_order_graphics_3_month, ozon_stock_dynamic
+from WB_API.ozon_stock_extract import ozon_stock_extract, ozon_stock_history
 from WB_API.ozon_orders_extract import ozon_extract_orders
 from WB_API.wb_stock_history import stock_history_extract
 from WB_API.wb_unite_stock_orders import wb_stock_orders_unite
@@ -126,7 +126,7 @@ async def process_stock_command(callback: CallbackQuery):
     doc = FSInputFile(doc_path)
     await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
-    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
+    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB_new)
 
 # Этот хендлер срабатывает на команду /WB_Expiration
 @router.callback_query(F.data=='/WB_Expiration')
@@ -138,7 +138,7 @@ async def process_wb_expiration_command(callback: CallbackQuery):
     doc = FSInputFile(doc_path)
     await callback.message.answer(text=LEXICON_RU['/expiration'])
     await callback.message.reply_document(document=doc)
-    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
+    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB_new)
 
 # Этот хендлер срабатывает на команду /WH_Stock_history
 @router.callback_query(F.data=='/WB_Stock_history')
@@ -150,7 +150,19 @@ async def process_wb_stock_history_command(callback: CallbackQuery):
     img = FSInputFile(img_path)
     await callback.message.answer(text=LEXICON_RU['/stock_history'])
     await callback.message.reply_photo(photo=img)
-    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
+    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB_new)
+
+# Этот хендлер срабатывает на команду /Ozon_Stock_history
+@router.callback_query(F.data=='/Ozon_Stock_history')
+async def process_ozon_stock_history_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBn_5o1TZqfGQ63BTKxBthggU1hNDiygACkRcAAmYJqEq49XihleTD1TYE')
+    img_path = ozon_stock_dynamic()
+    img = FSInputFile(img_path)
+    await callback.message.answer(text=LEXICON_RU['/stock_history'])
+    await callback.message.reply_photo(photo=img)
+    await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon_new)
 
 # Этот хендлер срабатывает на команду /Ozon_Orders
 @router.callback_query(F.data=='/Ozon_Orders')
@@ -198,7 +210,7 @@ async def process_ozon_stock_command(callback: CallbackQuery):
     doc = FSInputFile(doc_path)
     await callback.message.answer(text=LEXICON_RU['/stock'])
     await callback.message.reply_document(document=doc)
-    await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon)
+    await callback.message.answer(text="Ozon", reply_markup=keyboard_Ozon_new)
 
 # Этот хендлер срабатывает на команду /WhoIsOrta
 @router.message(F.text=='/WhoIsOrta')
@@ -235,6 +247,12 @@ async def process_wb_update_command(message: Message):
 async def process_wb_update_stock_command(message: Message):
     data = stock_history_extract()
     await message.answer(text='WB сток обновлён')
+
+# Этот хендлер срабатывает на команду /ozon_update_stock
+@router.message(F.text == '/ozon_update_stock')
+async def process_ozon_update_stock_command(message: Message):
+    data = ozon_stock_history()
+    await message.answer(text='Ozon сток обновлён')
 
 # Этот хендлер срабатывает на команду /wb_update_stock_sales
 @router.message(F.text == '/wb_update_stock_sales')
