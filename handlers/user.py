@@ -3,11 +3,13 @@ from aiogram.filters import Command, CommandStart
 from lexicon.lexicon import LEXICON_RU, LEXICON_PRODUCT_RU, LEXICON_PRODUCT_RU_WB, LEXICON_PRODUCT_RU_WB_OZON
 import os
 from aiogram import Router, F
-from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku, wb_ozon_order_graphics_by_sku, orders_process_3_month
+from WB_API.merge import stock_process, orders_process, union_sales, wb_order_graphics_by_sku, wb_ozon_order_graphics_by_sku, orders_process_3_month, wb_stock_dynamic, wb_expiration_date
 from keyboards.inline_keyboards import keyboard_Ozon, keyboard_WB, keyboard_start, create_inline_kb, keyboard_WB_new, keyboard_Ozon_new, keyboard_Ozon_middle, keyboard_WB_middle
 from WB_API.ozon_graphics import ozon_order_graphics, ozon_order_graphics_by_sku, ozon_order_graphics_3_month
 from WB_API.ozon_stock_extract import ozon_stock_extract
 from WB_API.ozon_orders_extract import ozon_extract_orders
+from WB_API.wb_stock_history import stock_history_extract
+from WB_API.wb_unite_stock_orders import wb_stock_orders_unite
 
 # Инициализируем роутер уровня модуля
 router = Router()
@@ -126,6 +128,30 @@ async def process_stock_command(callback: CallbackQuery):
     await callback.message.reply_document(document=doc)
     await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
 
+# Этот хендлер срабатывает на команду /WB_Expiration
+@router.callback_query(F.data=='/WB_Expiration')
+async def process_wb_expiration_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBn_5o1TZqfGQ63BTKxBthggU1hNDiygACkRcAAmYJqEq49XihleTD1TYE')
+    doc_path = wb_expiration_date()
+    doc = FSInputFile(doc_path)
+    await callback.message.answer(text=LEXICON_RU['/expiration'])
+    await callback.message.reply_document(document=doc)
+    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
+
+# Этот хендлер срабатывает на команду /WH_Stock_history
+@router.callback_query(F.data=='/WB_Stock_history')
+async def process_wb_stock_history_command(callback: CallbackQuery):
+    await callback.answer(text=LEXICON_RU['/wait'], show_alert=True)
+    await callback.message.reply_sticker(
+        sticker='CAACAgIAAxkBAAEBn_5o1TZqfGQ63BTKxBthggU1hNDiygACkRcAAmYJqEq49XihleTD1TYE')
+    img_path = wb_stock_dynamic()
+    img = FSInputFile(img_path)
+    await callback.message.answer(text=LEXICON_RU['/stock_history'])
+    await callback.message.reply_photo(photo=img)
+    await callback.message.answer(text="Wildberries", reply_markup=keyboard_WB)
+
 # Этот хендлер срабатывает на команду /Ozon_Orders
 @router.callback_query(F.data=='/Ozon_Orders')
 async def process_ozon_orders_command(callback: CallbackQuery):
@@ -203,6 +229,18 @@ async def process_stat_command(message: Message, user_dict: dict):
 async def process_wb_update_command(message: Message):
     data = union_sales()
     await message.answer(text='Началось обновление продаж WB')
+
+# Этот хендлер срабатывает на команду /wb_update_stock
+@router.message(F.text == '/wb_update_stock')
+async def process_wb_update_stock_command(message: Message):
+    data = stock_history_extract()
+    await message.answer(text='WB сток обновлён')
+
+# Этот хендлер срабатывает на команду /wb_update_stock_sales
+@router.message(F.text == '/wb_update_stock_sales')
+async def process_wb_update_stock_sales_command(message: Message):
+    data = wb_stock_orders_unite()
+    await message.answer(text='WB сток и продажи объединены')
 
 # Этот хендлер срабатывает на команду /ozon_update
 @router.message(F.text == '/ozon_update')

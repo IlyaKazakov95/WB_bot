@@ -278,4 +278,3 @@ def ozon_order_graphics_3_month():
     plt.savefig(img_path, dpi=300)
     plt.close()
     return img_path
-ozon_order_graphics_3_month()

@@ -1,11 +1,10 @@
 import json
 
-import lexicon
-from lexicon import *
 import matplotlib.pyplot as plt
 import seaborn as sns
-from WB_API.stock_extract import stock_extract
-from WB_API.orders_extract import orders_extract
+from WB_API.stock_extract import stock_extract # не забыть поменять на абсолютный путь
+from WB_API.orders_extract import orders_extract # не забыть поменять на абсолютный путь
+from lexicon import *
 import time
 import pandas as pd
 import datetime as dt
@@ -14,6 +13,10 @@ import matplotlib.dates as mdates
 from openpyxl import load_workbook
 import numpy as np
 import matplotlib.patches as mpatches
+from openpyxl.styles import PatternFill
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.styles import numbers
+from openpyxl.styles import Alignment
 
 def orders_process():
     xlsx_path = Path(__file__).parent / "wb_orders_history.xlsx"
@@ -60,10 +63,10 @@ def orders_process():
     plt.xticks(rotation=45)
     plt.xlabel("")
     plt.ylabel("Количество заказов")
-    plt.tight_layout()
     img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     img_name = f'sales_by_date {img_date}.png'
     plt.title(f"Заказы по датам. Время формирования отчета {img_date}")
+    plt.tight_layout()
     img_path = Path(__file__).parent / img_name
     plt.savefig(img_path, dpi=300)  # сохранение картинки
     plt.close()
@@ -225,12 +228,12 @@ def wb_order_graphics_by_sku(filter=None):
     plt.xlabel("")
     plt.ylabel(f"Заказано, штук")
     plt.title(filter_name)
-    plt.tight_layout()
     timestamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     if filter:
         img_name = f"wb_sales_sku_{filter}_{timestamp}.png"
     else:
         img_name = f"wb_sales_all_{timestamp}.png"
+    plt.tight_layout()
     img_path = Path(__file__).parent / img_name
     plt.savefig(img_path, dpi=300)
     plt.close()
@@ -422,11 +425,221 @@ def orders_process_3_month():
     plt.xlabel("")
     plt.ylabel("Количество заказов")
     plt.legend()
-    plt.tight_layout()
     img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     img_name = f'sales_by_date_3_month {img_date}.png'
     plt.title(f"Заказы по датам. Время формирования отчета {img_date}")
+    plt.tight_layout()
     img_path = Path(__file__).parent / img_name
     plt.savefig(img_path, dpi=300)  # сохранение картинки
     plt.close()
     return img_path
+
+def wb_stock_dynamic():
+    xlsx_path = Path(__file__).parent / "wb_stock_history.xlsx"
+    df = pd.read_excel(xlsx_path)
+    df_new = df[['date', 'barcodesCount']]
+    df_group = df_new.groupby(['date'], as_index=False).agg(stock=('barcodesCount', 'sum'))
+    df_group['date'] = pd.to_datetime(df_group['date'])
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(
+        data=df_group,
+        x='date',
+        y='stock',
+        color='red'
+    )
+    # заливка под линией
+    plt.fill_between(
+        df_group['date'],
+        df_group['stock'],
+        color='red',  # цвет заливки
+        alpha=0.3  # прозрачность
+    )
+    # ===== Среднее значение =====
+    mean_val = df_group['stock'].mean()
+    plt.axhline(mean_val, color="blue", linestyle="--", linewidth=1.5, label=f"Средний сток: {mean_val:.1f}")
+    # получаем значение за последний день
+    date_filter = max(df_group['date'])
+    date_value = df_group.loc[df_group["date"] == date_filter, "stock"]
+    if not date_value.empty:
+        date_value = date_value.values[0]
+    else:
+        date_value = None
+    # горизонтальная пунктирная линия по последнему значению стока
+    if date_value is not None:
+        plt.axhline(y=date_value, color="black", linestyle="--", alpha=0.6)
+        plt.scatter(df_group.loc[df_group["date"] == date_filter, "date"], date_value,
+                    color="black", zorder=5, s=80, label=f"Текущий сток: {date_value:.1f}")
+
+    # Настройка оси X для дат
+    plt.xlabel("")
+    plt.ylabel("Уровень товарных запасов")
+    plt.legend()
+    img_date = dt.datetime.now().strftime("%Y%m%d%H%M%S")
+    img_name = f'wb_stock_history {img_date}.png'
+    plt.title(f"Динамика стока. Время формирования отчета {img_date}")
+    plt.tight_layout()
+    img_path = Path(__file__).parent / img_name
+    plt.savefig(img_path, dpi=300)  # сохранение картинки
+    plt.close()
+    return img_path
+
+def wb_expiration_date():
+    xlsx_path = Path(__file__).parent / "wb_stock_history.xlsx"
+    df = pd.read_excel(xlsx_path)
+    df = df[df['date']==max(df['date'])]
+    df_stock = df[['date', 'barcode', 'warehouse', 'giId', 'barcodesCount']]
+    df_stock = df_stock[df_stock['barcodesCount'] > 0]
+    df_arrivals = read_arrivals()
+    df_arrivals = df_arrivals.groupby(['Баркод товара', 'Поставка']).agg(expiration_date=('Срок годности', 'max'))
+    df_full = df_stock.merge(df_arrivals, left_on=['barcode', 'giId'], right_on=['Баркод товара', 'Поставка'], how='left')
+    df_full = df_full[['date', 'barcode', 'warehouse', 'giId', 'barcodesCount', 'expiration_date']]
+    df_full = df_full.rename(columns={'giId': 'arrival_number', 'barcodesCount': 'stock_qty'})
+    df_mapping = read_xls()
+    df_mapping = df_mapping[['barcode', 'Наименование', 'Срок Годности']]
+    df_mapping = df_mapping.rename(columns={'Наименование':'description', 'Срок Годности':'shelf_life'})
+    df_full = df_full.merge(df_mapping, left_on='barcode', right_on='barcode', how='left')
+    df_full['ОСГ'] = df_full.apply(
+        lambda x: (x['expiration_date'].date() - dt.date.today()).days if pd.notnull(x['expiration_date']) else "-" if
+        x['shelf_life'] == "-" else "?", axis=1)
+    def sort_func(x):
+        if isinstance(x, str) and x == "?":
+            return 0
+        elif isinstance(x, str) and x == "-":
+            return 10000
+        elif isinstance(x, (int, float)):
+            return int(x)
+        else:
+            return None
+    df_full = df_full.sort_values(by='ОСГ', key=lambda col: col.apply(sort_func), ascending=True)
+    df_whs = read_whs()
+    df_whs.index = df_whs['Основные склады']
+    df_whs2 = df_whs.drop(['Основные склады', 'ПВЗ'], axis=1)
+    whs = df_whs2.to_dict('index')
+    df_full_new = df_full.merge(df_whs['ПВЗ'], left_on='warehouse', right_on=df_whs.index, how='left')
+    df_full_new['ПВЗ'] = df_full_new['ПВЗ'].apply(lambda x: int(x) if pd.notnull(x) else 1)
+    df_full_new['ОСГ_num'] = df_full_new['ОСГ'].apply(sort_func)  # чтобы сравнить потом все строки и не было ошибки между str и int
+    df_full_new['Кластер'] = df_full_new.apply(
+        lambda x: whs.get(x['warehouse'], "-")['Кластер'] if whs.get(x['warehouse'], "-") != "-" else "-", axis=1)
+    df_full_new['Сток шт <= сроку тек батча'] = df_full_new.apply(
+        lambda x: sum(df_full_new[
+                          (df_full_new['barcode'] == x['barcode']) & (df_full_new['Кластер'] == x['Кластер']) & (
+                                  df_full_new['ОСГ_num'] <= x['ОСГ_num'])]['stock_qty']) if (
+                (x['ОСГ'] != "-") & (x['ОСГ'] != "?") & (pd.notnull(x['ОСГ_num']))) else x['stock_qty'], axis=1)
+    order_path = Path(__file__).parent / "wb_stock_orders.xlsx"
+    df_orders = pd.read_excel(order_path)
+    df_orders = df_orders[df_orders['OOS'] == 0][['date', 'barcode', 'cluster', 'total_sales']]
+    df_orders['rank'] = df_orders.groupby(['barcode', 'cluster'])['date'].rank(method="dense", ascending=False)
+    df_orders = df_orders.sort_values(by=['barcode', 'cluster', 'date'], ascending=[False, False, False])
+    df_orders_14 = df_orders[df_orders['rank'] <= 14].groupby(['barcode', 'cluster']).agg(
+        avg_sales14=('total_sales', 'mean')).reset_index()
+    df_orders_28 = df_orders[df_orders['rank'] <= 28].groupby(['barcode', 'cluster']).agg(
+        avg_sales28=('total_sales', 'mean')).reset_index()
+    df_orders_90 = df_orders[df_orders['rank'] <= 90].groupby(['barcode', 'cluster']).agg(
+        avg_sales90=('total_sales', 'mean')).reset_index()
+    df_full_final = df_full_new.merge(df_orders_90, left_on=['barcode', 'Кластер'], right_on=['barcode', 'cluster'],
+                                      how='left')
+    df_full_final = df_full_final.merge(df_orders_28, left_on=['barcode', 'Кластер'], right_on=['barcode', 'cluster'],
+                                        how='left')
+    df_full_final = df_full_final.merge(df_orders_14, left_on=['barcode', 'Кластер'], right_on=['barcode', 'cluster'],
+                                        how='left')
+    df_full_final = df_full_final.drop(['cluster_x', 'cluster', 'cluster_y'], axis=1)
+    df_full_final['fact_off_take'] = df_full_final.apply(lambda x: max(x['avg_sales14'], x['avg_sales28']), axis=1)
+    df_full_final['plan_off_take'] = df_full_final['avg_sales90']
+    df_full_final['ОСГ на момент продажи план'] = df_full_final.apply(
+        lambda x: max(x['ОСГ_num'] - int(x['stock_qty'] / x['plan_off_take']), 0)
+        if ((x['plan_off_take'] > 0) & (x['ОСГ'] != "-") & (x['ОСГ'] != "?") & (pd.notnull(x['ОСГ_num'])))
+        else "-" if (x['ОСГ'] != "?")
+        else "?", axis=1)
+    df_full_final['ОСГ на момент продажи факт'] = df_full_final.apply(
+        lambda x: max(x['ОСГ_num'] - int(x['stock_qty'] / x['fact_off_take']), 0)
+        if ((x['fact_off_take'] > 0) & (x['ОСГ'] != "-") & (x['ОСГ'] != "?") & (pd.notnull(x['ОСГ_num'])))
+        else "-" if (x['ОСГ'] != "?")
+        else "?", axis=1)
+    def threshold(x):
+        if x == "-":
+            return 1000
+        try:
+            if int(x) <= 300:
+                return 90
+            elif int(x) <= 365:
+                return 120
+            else:
+                return 180
+        except Exception:
+            return 1000
+    df_full_final['Трешхолд'] = df_full_final['shelf_life'].apply(lambda x: threshold(x))
+    df_full_final['Фильтр'] = df_full_final.apply(
+        lambda x: 1 if (x['ОСГ на момент продажи факт'] == "?") & (x['ПВЗ'] == 0)
+        else 0 if (x['ОСГ на момент продажи факт'] == "-") | (x['Трешхолд'] == 1000) | (
+                x['ОСГ на момент продажи факт'] == "?")
+        else 1 if (x['ОСГ на момент продажи факт'] <= x['Трешхолд']) & (x['ПВЗ'] == 0)
+        else 0, axis=1)
+    df_full_final['Трешхолд'] = df_full_final['Трешхолд'].apply(lambda x: x if x < 1000 else "-")
+    df_full_final = df_full_final.drop(['ОСГ_num', 'avg_sales90', 'avg_sales28', 'avg_sales14'], axis=1)
+    df_full_final['expiration_date'] = df_full_final['expiration_date'].dt.date
+    final_path = Path(__file__).parent / "wb_stock_expiration.xlsx"
+    df_full_final.to_excel(final_path, index=False)
+    # Загружаем книгу и лист
+    wb = load_workbook(final_path)
+    ws = wb.active  # если один лист
+    # --- Шаг 2. Делаем «умную таблицу» ---
+    # Определяем диапазон таблицы (например, A1:R100)
+    max_row = ws.max_row
+    max_col = ws.max_column
+    table_ref = f"A1:{chr(64 + max_col)}{max_row}"  # работает, если < 26 столбцов (A–Z)
+    table = Table(displayName="DataTable", ref=table_ref)
+    # Добавляем стиль «Table Style Medium 9» (с чередованием строк)
+    style = TableStyleInfo(
+        name="TableStyleMedium9", showRowStripes=True, showColumnStripes=False
+    )
+    table.tableStyleInfo = style
+    ws.add_table(table)
+    # --- Шаг 3. Подсвечиваем строки, где Фильтр == 1 ---
+    highlight = PatternFill(start_color="F8CCCD", end_color="F8CCCD", fill_type="solid")
+    # Находим колонку "Фильтр"
+    filter_col_idx = None
+    for i, cell in enumerate(ws[1], start=1):
+        if cell.value == "Фильтр":
+            filter_col_idx = i
+            break
+
+    if filter_col_idx:
+        for row in ws.iter_rows(min_row=2):
+            if row[filter_col_idx - 1].value == 1:
+                for cell in row:
+                    cell.fill = highlight
+
+    # Найдём индекс колонки 'barcode'
+    barcode_col_idx = None
+    for i, cell in enumerate(ws[1], start=1):
+        if cell.value == "barcode":
+            barcode_col_idx = i
+            break
+
+    # Применим числовой формат к столбцу
+    if barcode_col_idx:
+        for row in ws.iter_rows(min_row=2, min_col=barcode_col_idx, max_col=barcode_col_idx):
+            for cell in row:
+                # Формат числа без дробной части
+                cell.number_format = '0'
+    ws.column_dimensions['G'].width = 39
+    ws.column_dimensions['B'].width = 15
+    ws.column_dimensions['A'].width = 10
+    ws.column_dimensions['D'].width = 10
+    ws.column_dimensions['F'].width = 11
+    ws.column_dimensions['E'].width = 7
+    ws.column_dimensions['H'].width = 7
+    ws.column_dimensions['I'].width = 7
+    ws.column_dimensions['J'].width = 7
+    ws.column_dimensions['O'].width = 10
+    ws.column_dimensions['P'].width = 10
+    # Увеличиваем высоту первой строки (заголовков)
+    ws.row_dimensions[1].height = 42
+    # Включаем перенос текста (wrap text) для всех заголовков
+    for cell in ws[1]:
+        cell.alignment = Alignment(wrapText=True, horizontal='center', vertical='center')
+    # Настройка внешнего вида
+    ws.sheet_view.zoomScale = 85  # масштаб 85%
+    # --- Шаг 4. Сохраняем итог ---
+    wb.save(final_path)
+    return final_path
