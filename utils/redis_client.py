@@ -1,5 +1,5 @@
 import redis.asyncio as redis
-from config import RedisSettings
+from config.config import RedisSettings
 
 def init_redis(settings: RedisSettings):
     auth = ""
