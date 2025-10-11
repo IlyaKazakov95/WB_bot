@@ -29,7 +29,7 @@ async def main() -> None:
     redis_client = init_redis(config.redis)
     # Инициализируем бот и диспетчер
     bot = Bot(token=config.bot.token)
-    dp = Dispatcher(storage=storage)
+    dp = Dispatcher()
 
     # создаём планировщик для asyncio
     scheduler = AsyncIOScheduler(timezone=timezone("Europe/Moscow"))
