@@ -51,7 +51,8 @@ async def main() -> None:
     # Настраиваем кнопку меню
     await set_menu(bot)
     # Регистрируем миддлвари
-    dp.update.middleware(OuterMiddleware(redis_client))
+    dp.message.middleware(OuterMiddleware(redis_client))
+    dp.callback_query.middleware(OuterMiddleware(redis_client))
 
     # Регистриуем роутеры в диспетчере
     dp.include_router(user.router)

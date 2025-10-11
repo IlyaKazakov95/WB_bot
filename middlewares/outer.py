@@ -21,6 +21,7 @@ class OuterMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any]
         ) -> Any:
+        logger.debug("OuterMiddleware запущена")
         user = getattr(event, "from_user", None)
         if not user:
             return await handler(event, data)
