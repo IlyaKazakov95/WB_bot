@@ -6,6 +6,7 @@ from config.config import Database
 import datetime as dt
 from redis.asyncio import Redis
 from dataclasses import asdict
+import json
 
 
 class OuterMiddleware(BaseMiddleware):
