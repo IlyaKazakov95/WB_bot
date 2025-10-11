@@ -11,6 +11,15 @@ class LogSettings:
     format: str
 
 @dataclass
+class RedisSettings:
+    host: str
+    port: int
+    db: int
+    password: str
+    username: str
+
+
+@dataclass
 class Config:
     bot: TgBot
     log: LogSettings
@@ -22,13 +31,6 @@ class Database:
     requests_qty: int
     last_requests_date: str
 
-@dataclass
-class RedisSettings:
-    host: str
-    port: int
-    db: int
-    password: str
-    username: str
 
 def load_config(path: str | None = None) -> Config:
     env = Env()
