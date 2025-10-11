@@ -225,7 +225,7 @@ async def process_who_command(message: Message):
 @router.message(F.text == '/stat')
 async def process_stat_command(message: Message, redis: Redis):
     keys = await redis.keys("user:*")
-    if not not keys:
+    if not keys:
         await message.answer("Нет данных о пользователях.")
         return
 

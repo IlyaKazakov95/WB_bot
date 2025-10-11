@@ -19,8 +19,9 @@ class OuterMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any]
         ) -> Any:
-        user: User = data.get("event_from_user")
-        user_id = user.id
+        user = getattr(event, "from_user", None)
+        if not user:
+            return await handler(event, data)
 
         key = f"user:{user_id}"
         user_json = await self.redis.get(key)
@@ -35,5 +36,5 @@ class OuterMiddleware(BaseMiddleware):
                 last_requests_date=str(dt.datetime.now())
             ))
         await self.redis.set(key, json.dumps(user_data), ex=86400 * 360)
-        data["user_dict"] = user_data
+        data["redis"] = self.redis
         return await handler(event, data)

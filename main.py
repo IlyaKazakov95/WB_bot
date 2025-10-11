@@ -55,7 +55,7 @@ async def main() -> None:
     dp.include_router(user.router)
 
     # Регистрируем миддлвари
-    dp.update.outer_middleware(OuterMiddleware(redis_client))
+    dp.update.middleware(OuterMiddleware(redis_client))
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
