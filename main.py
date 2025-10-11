@@ -16,6 +16,7 @@ from WB_API.wb_stock_history import stock_history_extract
 from WB_API.wb_unite_stock_orders import wb_stock_orders_unite
 from WB_API.merge import union_sales
 from WB_API.ozon_stock_extract import ozon_stock_history
+from utils.redis_client import init_redis
 
 async def main() -> None:
     # Загружаем конфиг в переменную config
