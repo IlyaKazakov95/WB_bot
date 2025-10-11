@@ -50,12 +50,11 @@ async def main() -> None:
 
     # Настраиваем кнопку меню
     await set_menu(bot)
+    # Регистрируем миддлвари
+    dp.update.middleware(OuterMiddleware(redis_client))
 
     # Регистриуем роутеры в диспетчере
     dp.include_router(user.router)
-
-    # Регистрируем миддлвари
-    dp.update.middleware(OuterMiddleware(redis_client))
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
